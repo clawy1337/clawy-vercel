@@ -20,6 +20,12 @@ const users = [
     }
 ];
 
+// GitHub bilgileri
+const REPO_OWNER = 'clawy1337';
+const REPO_NAME = 'clawy-vercel';
+const BRANCH = 'main';
+const FILE_PATH = 'status.json';
+
 // Giriş kontrolü
 async function checkLogin(username, password) {
     const savedUsername = localStorage.getItem('username');
@@ -52,6 +58,17 @@ function isAdmin() {
     return localStorage.getItem('isAdmin') === 'true';
 }
 
+// Çıkış yap fonksiyonu
+function logout() {
+    localStorage.removeItem('username');
+    localStorage.removeItem('passwordHash');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('lastLogin');
+    document.getElementById('main-content').style.display = 'none';
+    document.getElementById('login-container').style.display = 'block';
+    document.getElementById('login-message').textContent = 'Çıkış yapıldı!';
+}
+
 // JSON'dan durumu çek
 async function fetchStatus() {
     const statusTextEl = document.getElementById('statusText');
@@ -69,7 +86,33 @@ async function fetchStatus() {
     }
 }
 
-// Durumu güncelle (manuel)
+// Durumu otomatik güncelle (GitHub API)
+async function updateStatusJson(newStatus, now) {
+    try {
+        // Token istemci tarafında değil, GitHub Actions veya backend’de olacak
+        const response = await fetch('/api/update-status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                status_text: newStatus,
+                last_updated: now,
+                last_updated_by: localStorage.getItem('username')
+            })
+        });
+        if (response.ok) {
+            alert('Durum başarıyla kaydedildi!');
+        } else {
+            const errorData = await response.json();
+            console.error('Güncelleme hatası:', errorData);
+            alert('Güncelleme hatası: ' + errorData.message);
+        }
+    } catch (error) {
+        console.error('API hatası:', error);
+        alert('API hatası: ' + error.message);
+    }
+}
+
+// Durumu güncelle
 async function editStatus() {
     if (!isAdmin()) {
         alert('Sadece adminler durumu değiştirebilir!');
@@ -82,12 +125,6 @@ async function editStatus() {
         const now = new Date().toLocaleString('tr-TR');
         statusTextEl.innerText = newStatus.trim();
         lastUpdateEl.innerText = now;
-        const jsonContent = JSON.stringify({
-            status_text: newStatus.trim(),
-            last_updated: now,
-            last_updated_by: localStorage.getItem('username')
-        }, null, 2);
-        console.log('Yeni status.json içeriği:', jsonContent);
-        alert('Durum değiştirildi! status.json\'u manuel güncelle: Konsoldaki JSON\'u kopyala, GitHub\'da status.json\'a yapıştır.');
+        await updateStatusJson(newStatus.trim(), now);
     }
 }
