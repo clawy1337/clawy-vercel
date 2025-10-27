@@ -20,12 +20,6 @@ const users = [
     }
 ];
 
-// GitHub bilgileri
-const REPO_OWNER = 'clawy1337';
-const REPO_NAME = 'clawy-vercel';
-const BRANCH = 'main';
-const FILE_PATH = 'status.json';
-
 // Giriş kontrolü
 async function checkLogin(username, password) {
     const savedUsername = localStorage.getItem('username');
@@ -86,10 +80,9 @@ async function fetchStatus() {
     }
 }
 
-// Durumu otomatik güncelle (GitHub API)
+// Durumu otomatik güncelle (Vercel Functions)
 async function updateStatusJson(newStatus, now) {
     try {
-        // Token istemci tarafında değil, GitHub Actions veya backend’de olacak
         const response = await fetch('/api/update-status', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
