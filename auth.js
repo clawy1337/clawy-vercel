@@ -6,7 +6,7 @@ async function sha256(str) {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Sabit kullanıcı listesi (şifreler hash'lenmiş)
+// Sabit kullanıcı listesi
 const users = [
     {
         username: 'clawy',
@@ -52,7 +52,7 @@ function isAdmin() {
     return localStorage.getItem('isAdmin') === 'true';
 }
 
-// Çıkış yap fonksiyonu
+// Çıkış yap
 function logout() {
     localStorage.removeItem('username');
     localStorage.removeItem('passwordHash');
@@ -80,7 +80,7 @@ async function fetchStatus() {
     }
 }
 
-// Durumu otomatik güncelle (Vercel Functions)
+// Durumu otomatik güncelle
 async function updateStatusJson(newStatus, now) {
     try {
         const response = await fetch('/api/update-status', {
@@ -92,16 +92,16 @@ async function updateStatusJson(newStatus, now) {
                 last_updated_by: localStorage.getItem('username')
             })
         });
+        const result = await response.json();
         if (response.ok) {
             alert('Durum başarıyla kaydedildi!');
         } else {
-            const errorData = await response.json();
-            console.error('Güncelleme hatası:', errorData);
-            alert('Güncelleme hatası: ' + errorData.message);
+            console.error('Güncelleme hatası:', result);
+            alert(`Güncelleme hatası: ${result.error || 'Bilinmeyen hata'}`);
         }
     } catch (error) {
         console.error('API hatası:', error);
-        alert('API hatası: ' + error.message);
+        alert(`API hatası: ${error.message}`);
     }
 }
 
