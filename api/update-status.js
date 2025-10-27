@@ -28,6 +28,7 @@ module.exports = async (req, res) => {
 
         res.status(200).json({ message: 'Durum güncellendi' });
     } catch (error) {
+        console.error('Hata:', error);
         res.status(500).json({ message: 'Güncelleme hatası', error: error.message });
     }
 };
