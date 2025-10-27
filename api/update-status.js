@@ -2,11 +2,10 @@ const { Octokit } = require('@octokit/rest');
 
 module.exports = async (req, res) => {
     const { status_text, last_updated, last_updated_by } = req.body;
-    const GITHUB_TOKEN = process.env.GITHUB_TOKEN; // Vercel Environment Variables’dan
+    const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
     const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
     try {
-        // Mevcut dosyanın SHA’sını al
         const { data } = await octokit.repos.getContent({
             owner: 'clawy1337',
             repo: 'clawy-vercel',
@@ -14,12 +13,9 @@ module.exports = async (req, res) => {
             branch: 'main'
         });
         const sha = data.sha;
-
-        // Yeni JSON içeriği
         const jsonContent = JSON.stringify({ status_text, last_updated, last_updated_by }, null, 2);
         const newContent = Buffer.from(jsonContent).toString('base64');
 
-        // Dosyayı güncelle
         await octokit.repos.createOrUpdateFileContents({
             owner: 'clawy1337',
             repo: 'clawy-vercel',
