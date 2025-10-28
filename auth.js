@@ -1,4 +1,4 @@
-// SHA-256 için fonksiyon
+// SHA-256
 async function sha256(str) {
     const msgBuffer = new TextEncoder().encode(str);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -6,21 +6,11 @@ async function sha256(str) {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Sabit kullanıcı listesi
 const users = [
-    {
-        username: 'clawy',
-        passwordHash: 'c9d5729c18737636e48f9e5466ed20e295ab49d2dd9744fb4828a9c8741b30be', // clawy123
-        isAdmin: true
-    },
-    {
-        username: 'user1',
-        passwordHash: '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', // pass123
-        isAdmin: false
-    }
+    { username: 'clawy', passwordHash: 'c9d5729c18737636e48f9e5466ed20e295ab49d2dd9744fb4828a9c8741b30be', isAdmin: true },
+    { username: 'user1', passwordHash: '9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c', isAdmin: false }
 ];
 
-// Giriş kontrolü
 async function checkLogin(username, password) {
     const savedUsername = localStorage.getItem('username');
     const savedHash = localStorage.getItem('passwordHash');
@@ -47,40 +37,42 @@ async function checkLogin(username, password) {
     }
 }
 
-// Admin kontrolü
 function isAdmin() {
     return localStorage.getItem('isAdmin') === 'true';
 }
 
-// Çıkış yap
 function logout() {
-    localStorage.removeItem('username');
-    localStorage.removeItem('passwordHash');
-    localStorage.removeItem('isAdmin');
-    localStorage.removeItem('lastLogin');
+    localStorage.clear();
     document.getElementById('main-content').style.display = 'none';
     document.getElementById('login-container').style.display = 'block';
     document.getElementById('login-message').textContent = 'Çıkış yapıldı!';
 }
 
-// JSON'dan durumu çek
+// DURUM ÇEK
 async function fetchStatus() {
     const statusTextEl = document.getElementById('statusText');
     const lastUpdateEl = document.getElementById('lastUpdate');
     if (!statusTextEl || !lastUpdateEl) return;
+
+    if (!localStorage.getItem('username')) {
+        statusTextEl.innerText = 'Giriş yapın';
+        lastUpdateEl.innerText = '';
+        return;
+    }
+
     try {
-        const response = await fetch('status.json');
-        const data = await response.json();
-        statusTextEl.innerText = data.status_text || 'Aktif • Yeni Kent Mahallesi';
-        lastUpdateEl.innerText = data.last_updated || '27 Ekim 2025';
+        const response = await fetch('/api/status');
+        if (response.ok) {
+            const data = await response.json();
+            statusTextEl.innerText = data.status_text;
+            lastUpdateEl.innerText = data.last_updated;
+        }
     } catch (error) {
-        statusTextEl.innerText = 'Aktif • Yeni Kent Mahallesi';
-        lastUpdateEl.innerText = '27 Ekim 2025';
-        console.error('Durum çekme hatası:', error);
+        statusTextEl.innerText = 'Bağlantı hatası';
     }
 }
 
-// Durumu otomatik güncelle
+// DURUM GÜNCELLE
 async function updateStatusJson(newStatus, now) {
     try {
         const response = await fetch('/api/update-status', {
@@ -92,32 +84,24 @@ async function updateStatusJson(newStatus, now) {
                 last_updated_by: localStorage.getItem('username')
             })
         });
-        const result = await response.json();
         if (response.ok) {
-            alert('Durum başarıyla kaydedildi!');
+            alert('Durum kaydedildi!');
         } else {
-            console.error('Güncelleme hatası:', result);
-            alert(`Güncelleme hatası: ${result.error || 'Bilinmeyen hata'}`);
+            const err = await response.json();
+            alert('Hata: ' + (err.error || 'Bilinmiyor'));
         }
     } catch (error) {
-        console.error('API hatası:', error);
-        alert(`API hatası: ${error.message}`);
+        alert('API hatası: ' + error.message);
     }
 }
 
-// Durumu güncelle
 async function editStatus() {
-    if (!isAdmin()) {
-        alert('Sadece adminler durumu değiştirebilir!');
-        return;
-    }
-    const newStatus = prompt('Yeni durumunu gir (örneğin: Aktif • Beşiktaş):', document.getElementById('statusText').innerText);
-    if (newStatus && newStatus.trim() !== '') {
-        const statusTextEl = document.getElementById('statusText');
-        const lastUpdateEl = document.getElementById('lastUpdate');
+    if (!isAdmin()) return alert('Yetkiniz yok!');
+    const newStatus = prompt('Yeni durum:', document.getElementById('statusText').innerText);
+    if (newStatus?.trim()) {
         const now = new Date().toLocaleString('tr-TR');
-        statusTextEl.innerText = newStatus.trim();
-        lastUpdateEl.innerText = now;
+        document.getElementById('statusText').innerText = newStatus.trim();
+        document.getElementById('lastUpdate').innerText = now;
         await updateStatusJson(newStatus.trim(), now);
     }
 }
