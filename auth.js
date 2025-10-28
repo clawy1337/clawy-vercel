@@ -1,4 +1,4 @@
-// auth.js - KESİN ÇALIŞIR: user girer, admin değiştirir, alert yok
+// auth.js - KESİN ÇALIŞIR: İKİSİ DE "Hoşgeldin Sahip"
 const users = [
   { username: 'admin', passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', isAdmin: true },  // admin
   { username: 'user',  passwordHash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', isAdmin: false }   // user
@@ -63,6 +63,7 @@ function logout() {
   document.getElementById('main-content').style.display = 'none';
   document.getElementById('login-container').style.display = 'block';
   clearLoginError();
+  document.getElementById('welcome-message').textContent = '';
 }
 
 // Giriş butonu
@@ -73,9 +74,14 @@ document.getElementById('login-btn')?.addEventListener('click', async () => {
   if (user) {
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('main-content').style.display = 'block';
-    document.getElementById('welcome-message').textContent = `Hoş geldin, ${username}!`;
+    document.getElementById('welcome-message').textContent = 'Hoşgeldin Sahip';
     document.getElementById('status-message').textContent = '';
     fetchStatus();
+    if (isAdmin()) {
+      document.getElementById('editButton').style.display = 'block';
+    } else {
+      document.getElementById('editButton').style.display = 'none';
+    }
   }
 });
 
@@ -87,9 +93,14 @@ window.addEventListener('load', () => {
     if (user) {
       document.getElementById('login-container').style.display = 'none';
       document.getElementById('main-content').style.display = 'block';
-      document.getElementById('welcome-message').textContent = `Hoş geldin, ${savedUsername}!`;
+      document.getElementById('welcome-message').textContent = 'Hoşgeldin Sahip';
       document.getElementById('status-message').textContent = '';
       fetchStatus();
+      if (isAdmin()) {
+        document.getElementById('editButton').style.display = 'block';
+      } else {
+        document.getElementById('editButton').style.display = 'none';
+      }
     }
   }
 });
@@ -98,7 +109,6 @@ window.addEventListener('load', () => {
 async function fetchStatus() {
   const statusTextEl = document.getElementById('statusText');
   const lastUpdateEl = document.getElementById('lastUpdate');
-  const messageEl = document.getElementById('status-message');
   if (!statusTextEl || !lastUpdateEl) return;
 
   if (!localStorage.getItem('username')) {
@@ -112,7 +122,6 @@ async function fetchStatus() {
       const data = await response.json();
       statusTextEl.innerText = data.status_text;
       lastUpdateEl.innerText = data.last_updated;
-      if (messageEl) messageEl.textContent = '';
     }
   } catch (error) {
     console.error('Hata:', error);
@@ -150,7 +159,7 @@ async function updateStatusJson(newStatus, now) {
 async function editStatus() {
   if (!isAdmin()) {
     const messageEl = document.getElementById('status-message');
-    if (messageEl) messageEl.textContent = 'Yetkiniz yok! Sadece admin değiştirebilir.';
+    if (messageEl) messageEl.textContent = 'Yetkisiz! Sadece admin değiştirebilir.';
     if (messageEl) messageEl.style.color = 'red';
     return;
   }
