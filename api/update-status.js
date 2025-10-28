@@ -1,33 +1,43 @@
-let redis;
-
-async function getRedis() {
-  if (!redis) {
-    const { Redis } = await import('@upstash/redis');
-    redis = new Redis({
-      url: process.env.KV_REST_API_URL,
-      token: process.env.KV_REST_API_TOKEN,
-    });
-  }
-  return redis;
-}
+// api/update-status.js
+import { Octokit } from "@octokit/rest";
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Sadece POST' });
-  }
+  if (req.method !== 'POST') return res.status(405).end();
 
   const { status_text, last_updated, last_updated_by } = req.body;
+  const token = process.env.GITHUB_TOKEN;
 
-  if (last_updated_by !== 'clawy') {
-    return res.status(403).json({ error: 'Yetkisiz' });
-  }
+  if (!token) return res.status(500).json({ error: 'Token eksik' });
+  if (last_updated_by !== 'clawy') return res.status(403).json({ error: 'Yetkisiz' });
+
+  const octokit = new Octokit({ auth: token });
 
   try {
-    const kv = await getRedis();
-    await kv.set('status', { status_text, last_updated, last_updated_by });
-    return res.status(200).json({ message: 'Başarıyla kaydedildi!' });
+    const { data } = await octokit.repos.getContent({
+      owner: 'clawy1337',
+      repo: 'clawy-vercel',
+      path: 'data/status.json'
+    });
+
+    const sha = data.sha;
+    const content = Buffer.from(JSON.stringify({
+      status_text,
+      last_updated,
+      last_updated_by
+    }, null, 2)).toString('base64');
+
+    await octokit.repos.createOrUpdateFileContents({
+      owner: 'clawy1337',
+      repo: 'clawy-vercel',
+      path: 'data/status.json',
+      message: `Güncelleme: ${status_text}`,
+      content,
+      sha,
+      branch: 'main'
+    });
+
+    res.status(200).json({ message: 'Kaydedildi!' });
   } catch (error) {
-    console.error('KV YAZMA HATASI:', error);
-    return res.status(500).json({ error: 'Kaydedilemedi', details: error.message });
+    res.status(500).json({ error: 'Kaydedilemedi' });
   }
 }
