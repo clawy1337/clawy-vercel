@@ -11,9 +11,12 @@
         :root {
             --bg: #000000;
             --text: #ffffff;
-            --neon: #ff0066;
-            --primary: #ff0066;
-            --glow: 0 0 20px rgba(255, 0, 102, 0.8);
+            --neon-green: #00ff88;
+            --neon-red: #ff0066;
+            --neon-purple: #cc00ff;
+            --glow-green: 0 0 25px rgba(0, 255, 136, 0.8);
+            --glow-red: 0 0 25px rgba(255, 0, 102, 0.8);
+            --glow-purple: 0 0 30px rgba(204, 0, 255, 0.7);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -39,26 +42,13 @@
             position: absolute;
             width: 2px;
             height: 60px;
-            background: linear-gradient(transparent, var(--neon));
-            opacity: 0.7;
+            background: linear-gradient(transparent, var(--neon-red));
+            opacity: 0.6;
             animation: fall linear infinite;
         }
         @keyframes fall {
             0% { transform: translateY(-100vh); }
             100% { transform: translateY(100vh); }
-        }
-
-        /* NEON KIRMIZI GLOW */
-        .neon-glow {
-            text-shadow: 
-                0 0 10px var(--neon),
-                0 0 20px var(--neon),
-                0 0 40px var(--neon);
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon); }
-            50% { text-shadow: 0 0 20px var(--neon), 0 0 40px var(--neon), 0 0 80px var(--neon); }
         }
 
         header {
@@ -68,27 +58,18 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid var(--neon);
-            box-shadow: var(--glow);
+            border-bottom: 1px solid var(--neon-red);
+            box-shadow: 0 0 20px rgba(255, 0, 102, 0.5);
         }
         .navbar-brand {
             font-family: 'Orbitron', sans-serif;
             color: var(--text) !important;
             font-weight: 900;
-            font-size: 2rem;
+            font-size: 1.7rem;
         }
         .navbar-brand span {
-            color: var(--neon);
-            text-shadow: 0 0 15px var(--neon);
-        }
-        .nav-link {
-            color: var(--text) !important;
-            font-weight: 900;
-            font-size: 1.1rem;
-        }
-        .nav-link:hover {
-            color: var(--neon) !important;
-            text-shadow: 0 0 10px var(--neon);
+            color: var(--neon-red);
+            text-shadow: 0 0 15px var(--neon-red);
         }
 
         .hero {
@@ -101,20 +82,21 @@
             position: relative;
             z-index: 1;
         }
+
         .profile-img {
-            width: 180px; height: 180px;
+            width: 160px; height: 160px;
             border-radius: 50%;
-            border: 5px solid var(--neon);
+            border: 5px solid var(--neon-red);
             box-shadow: 
-                0 0 20px var(--neon),
-                0 0 40px var(--neon);
+                0 0 20px var(--neon-red),
+                0 0 40px var(--neon-red);
             margin: 0 auto 20px;
             background: radial-gradient(circle, #1a0000, #000000);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4.5rem;
-            color: var(--neon);
+            font-size: 4rem;
+            color: var(--neon-red);
             animation: float 6s ease-in-out infinite;
         }
         @keyframes float {
@@ -123,15 +105,15 @@
         }
 
         h1 {
-            font-size: 4rem;
+            font-size: 3.8rem;
             margin: 15px 0;
             color: var(--text);
             font-weight: 900;
             letter-spacing: 2px;
         }
         h1 span {
-            color: var(--neon);
-            text-shadow: 0 0 20px var(--neon);
+            color: var(--neon-red);
+            text-shadow: 0 0 20px var(--neon-red);
         }
 
         .badge-custom {
@@ -141,7 +123,7 @@
             border-radius: 50px;
             font-size: 1rem;
             margin: 5px;
-            border: 1px solid var(--neon);
+            border: 1px solid var(--neon-red);
             box-shadow: 0 0 15px rgba(255, 0, 102, 0.5);
             font-weight: 900;
             letter-spacing: 1px;
@@ -172,7 +154,7 @@
             max-width: 700px;
             margin: 25px auto;
             line-height: 1.8;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text);
             font-weight: 900;
             letter-spacing: 0.5px;
@@ -183,42 +165,45 @@
             padding: 1.5rem;
             text-align: center;
             font-size: 1rem;
-            color: var(--text);
-            border-top: 1px solid var(--neon);
+            color: #ccc;
+            border-top: 1px solid var(--neon-red);
             font-weight: 900;
-            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
 
         /* GİRİŞ EKRANI */
         .login-container {
             background: rgba(10, 0, 10, 0.95);
-            border: 2px solid var(--neon);
-            border-radius: 25px;
+            border: 3px solid transparent;
+            border-radius: 30px;
             padding: 2.5rem;
             margin: 2rem auto;
             max-width: 450px;
             text-align: center;
-            box-shadow: 0 0 30px rgba(255, 0, 102, 0.6);
-            backdrop-filter: blur(12px);
+            box-shadow: 0 0 40px rgba(204, 0, 255, 0.3);
+            backdrop-filter: blur(15px);
             position: relative;
             z-index: 2;
         }
         .login-container::before {
             content: '';
             position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(45deg, var(--neon), #ff3399, #cc0066);
-            border-radius: 27px;
+            top: -3px; left: -3px; right: -3px; bottom: -3px;
+            background: linear-gradient(45deg, var(--neon-purple), #ff00ff, #9900cc, var(--neon-purple));
+            border-radius: 33px;
             z-index: -1;
-            animation: borderGlow 2s infinite;
+            animation: pulseGlow 2.5s infinite ease-in-out;
+            opacity: 0.8;
         }
-        @keyframes borderGlow {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; }
         }
+
         .login-container input {
             background: rgba(20, 0, 20, 0.8);
-            border: 1px solid var(--neon);
+            border: 1px solid var(--neon-red);
             color: var(--text);
             margin-bottom: 15px;
             border-radius: 15px;
@@ -235,11 +220,11 @@
             text-transform: uppercase;
         }
         .login-container button {
-            background: linear-gradient(45deg, var(--neon), #ff3399);
+            background: linear-gradient(45deg, var(--neon-red), #ff3399);
             border: none;
             padding: 14px 32px;
             border-radius: 50px;
-            box-shadow: 0 0 20px var(--neon);
+            box-shadow: 0 0 20px var(--neon-red);
             font-weight: 900;
             color: white;
             transition: 0.3s;
@@ -249,25 +234,30 @@
         .login-container button:hover {
             background: #ff0066;
             transform: translateY(-3px);
-            box-shadow: 0 0 30px var(--neon);
+            box-shadow: 0 0 30px var(--neon-red);
         }
-        #login-error { 
-            color: #ff6b6b; 
-            margin-top: 10px; 
+        #login-error {
+            color: #ff6b6b;
+            margin-top: 10px;
             font-weight: 900;
             font-size: 1.1rem;
         }
+
         #welcome-message {
             color: var(--text);
             font-weight: 900;
-            font-size: 1.2rem;
+            font-size: 1rem;
             margin-right: 10px;
-            text-shadow: 0 0 10px var(--neon);
-            background: rgba(255, 0, 102, 0.2);
+            text-shadow: 0 0 12px var(--neon-purple);
+            background: rgba(204, 0, 255, 0.2);
             padding: 6px 12px;
             border-radius: 20px;
-            border: 1px solid var(--neon);
-            box-shadow: 0 0 15px rgba(255, 0, 102, 0.4);
+            border: 1px solid var(--neon-purple);
+            box-shadow: 0 0 15px rgba(204, 0, 255, 0.4);
+        }
+        #welcome-message span {
+            color: var(--neon-purple);
+            text-shadow: 0 0 12px var(--neon-purple);
         }
     </style>
 </head>
@@ -278,7 +268,7 @@
 
     <!-- GİRİŞ EKRANI -->
     <div class="login-container" id="login-container">
-        <h2 class="neon-glow" style="color: white; font-size: 2.5rem;">GİRİŞ YAP</h2>
+        <h2 style="color: white; font-size: 2.5rem; font-weight: 900;">GİRİŞ YAP</h2>
         <input type="text" id="username" class="form-control" placeholder="KULLANICI ADI" required>
         <input type="password" id="password" class="form-control" placeholder="ŞİFRE" required>
         <button id="login-btn" class="btn">GİRİŞ</button>
@@ -292,7 +282,7 @@
                 <nav class="navbar navbar-expand-lg">
                     <a class="navbar-brand" href="#">CLAWY<span>1337</span></a>
                     <div class="ms-auto d-flex align-items-center">
-                        <span id="welcome-message"></span>
+                        <span id="welcome-message">HOŞGELDİNİZ <span>ADMIN</span>!</span>
                         <a href="durum.html" class="btn btn-outline-light btn-sm me-2">
                             <i class="fas fa-circle-dot"></i> DURUM
                         </a>
@@ -330,7 +320,7 @@
         </section>
 
         <footer>
-            © 2025 Clawy - Tüm hakları saklıdır.
+            2025 Clawy - Tüm hakları saklıdır.
         </footer>
     </div>
 
