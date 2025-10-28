@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Durum • Clawy1337</title>
+    <title>Durum Kontrol • Clawy1337</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet"/>
@@ -11,9 +11,12 @@
         :root {
             --bg: #000000;
             --text: #ffffff;
-            --neon: #ff0066;
-            --primary: #ff0066;
-            --glow: 0 0 20px rgba(255, 0, 102, 0.8);
+            --neon-green: #00ff88;
+            --neon-red: #ff0066;
+            --neon-yellow: #ffff00;
+            --glow-green: 0 0 20px rgba(0, 255, 136, 0.8);
+            --glow-red: 0 0 20px rgba(255, 0, 102, 0.8);
+            --glow-yellow: 0 0 20px rgba(255, 255, 0, 0.8);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -39,26 +42,13 @@
             position: absolute;
             width: 2px;
             height: 60px;
-            background: linear-gradient(transparent, var(--neon));
-            opacity: 0.7;
+            background: linear-gradient(transparent, var(--neon-red));
+            opacity: 0.6;
             animation: fall linear infinite;
         }
         @keyframes fall {
             0% { transform: translateY(-100vh); }
             100% { transform: translateY(100vh); }
-        }
-
-        /* NEON KIRMIZI GLOW */
-        .neon-glow {
-            text-shadow: 
-                0 0 10px var(--neon),
-                0 0 20px var(--neon),
-                0 0 40px var(--neon);
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon); }
-            50% { text-shadow: 0 0 20px var(--neon), 0 0 40px var(--neon), 0 0 80px var(--neon); }
         }
 
         header {
@@ -68,202 +58,154 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid var(--neon);
-            box-shadow: var(--glow);
+            border-bottom: 1px solid var(--neon-red);
+            box-shadow: var(--glow-red);
         }
         .navbar-brand {
             font-family: 'Orbitron', sans-serif;
             color: var(--text) !important;
             font-weight: 900;
-            font-size: 2rem;
+            font-size: 1.8rem;
         }
         .navbar-brand span {
-            color: var(--neon);
-            text-shadow: 0 0 15px var(--neon);
-        }
-        .nav-link {
-            color: var(--text) !important;
-            font-weight: 900;
-            font-size: 1.1rem;
-        }
-        .nav-link:hover {
-            color: var(--neon) !important;
-            text-shadow: 0 0 10px var(--neon);
+            color: var(--neon-red);
+            text-shadow: 0 0 15px var(--neon-red);
         }
 
         .container {
             padding: 3rem 1rem;
             flex: 1;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
         }
-        .status-card {
-            background: rgba(10, 0, 10, 0.95);
-            border: 2px solid var(--neon);
-            border-radius: 25px;
+
+        .status-box {
+            background: rgba(20, 0, 20, 0.95);
+            border: 3px solid transparent;
+            border-radius: 30px;
             padding: 3rem;
             text-align: center;
-            box-shadow: 0 0 30px rgba(255, 0, 102, 0.6);
-            max-width: 600px;
-            margin: 2rem auto;
-            backdrop-filter: blur(12px);
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 0 40px rgba(255, 0, 102, 0.4);
             position: relative;
+            backdrop-filter: blur(15px);
         }
-        .status-card::before {
+        .status-box::before {
             content: '';
             position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(45deg, var(--neon), #ff3399, #cc0066);
-            border-radius: 27px;
+            top: -3px; left: -3px; right: -3px; bottom: -3px;
+            background: linear-gradient(45deg, var(--neon-red), var(--neon-green), var(--neon-yellow));
+            border-radius: 33px;
             z-index: -1;
-            animation: borderGlow 2s infinite;
+            animation: borderPulse 3s infinite;
         }
+        @keyframes borderPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
         .status-icon {
-            font-size: 4rem;
-            color: var(--neon);
-            animation: float 6s ease-in-out infinite;
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: pulseIcon 2s infinite;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
-        .current-status {
-            font-size: 2.2rem;
+
+        .status-text {
+            font-size: 2.8rem;
+            margin: 20px 0;
             font-weight: 900;
-            color: var(--text);
-            margin: 1.5rem 0;
+            letter-spacing: 2px;
         }
-        .current-status span {
-            color: var(--neon);
-            text-shadow: 0 0 15px var(--neon);
+        .status-active { color: var(--neon-green); text-shadow: var(--glow-green); }
+        .status-passive { color: var(--neon-red); text-shadow: var(--glow-red); }
+
+        .location {
+            font-size: 1.6rem;
+            color: var(--neon-yellow);
+            text-shadow: var(--glow-yellow);
+            margin: 15px 0;
+            font-weight: 900;
         }
-        .btn-edit {
-            background: linear-gradient(45deg, var(--neon), #ff3399);
-            color: white;
-            border: none;
+
+        .btn-group {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .btn-status {
             padding: 14px 32px;
             border-radius: 50px;
             font-weight: 900;
-            margin-top: 20px;
-            box-shadow: 0 0 20px rgba(255, 0, 102, 0.7);
-            transition: 0.3s;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             letter-spacing: 1px;
+            border: none;
+            transition: all 0.3s;
+            min-width: 140px;
         }
-        .btn-edit:hover {
+        .btn-active {
+            background: linear-gradient(45deg, #00cc66, #00ff88);
+            color: black;
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.7);
+        }
+        .btn-active:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.9);
+        }
+        .btn-passive {
+            background: linear-gradient(45deg, #cc0066, #ff3399);
+            color: white;
+            box-shadow: 0 0 25px rgba(255, 0, 102, 0.7);
+        }
+        .btn-passive:hover {
             transform: translateY(-5px);
             box-shadow: 0 0 40px rgba(255, 0, 102, 0.9);
         }
-        #status-message {
-            margin-top: 15px;
-            font-size: 1.1rem;
-            font-weight: 900;
-            color: #ff6b6b;
+
+        .last-update {
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #aaa;
         }
+
         footer {
             background: rgba(5,0,5,0.95);
             padding: 1.5rem;
             text-align: center;
             font-size: 1rem;
-            color: var(--text);
-            border-top: 1px solid var(--neon);
+            color: #ccc;
+            border-top: 1px solid var(--neon-red);
             font-weight: 900;
-            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* GİRİŞ EKRANI */
-        .login-container {
-            background: rgba(10, 0, 10, 0.95);
-            border: 2px solid var(--neon);
-            border-radius: 25px;
-            padding: 2.5rem;
-            margin: 2rem auto;
-            max-width: 450px;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(255, 0, 102, 0.6);
-            backdrop-filter: blur(12px);
-            position: relative;
-            z-index: 2;
-        }
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(45deg, var(--neon), #ff3399, #cc0066);
-            border-radius: 27px;
-            z-index: -1;
-            animation: borderGlow 2s infinite;
-        }
-        @keyframes borderGlow {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
-        }
-        .login-container input {
-            background: rgba(20, 0, 20, 0.8);
-            border: 1px solid var(--neon);
-            color: var(--text);
-            margin-bottom: 15px;
-            border-radius: 15px;
-            padding: 14px;
-            font-weight: 900;
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .login-container input::placeholder {
-            color: #aaa;
-            font-weight: 900;
-            font-size: 1.3rem;
-            text-transform: uppercase;
-        }
-        .login-container button {
-            background: linear-gradient(45deg, var(--neon), #ff3399);
-            border: none;
-            padding: 14px 32px;
-            border-radius: 50px;
-            box-shadow: 0 0 20px var(--neon);
-            font-weight: 900;
-            color: white;
-            transition: 0.3s;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-        }
-        .login-container button:hover {
-            background: #ff0066;
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px var(--neon);
-        }
-        #login-error { 
-            color: #ff6b6b; 
-            margin-top: 10px; 
-            font-weight: 900;
-            font-size: 1.1rem;
-        }
         #welcome-message {
             color: var(--text);
             font-weight: 900;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-right: 10px;
-            text-shadow: 0 0 10px var(--neon);
-            background: rgba(255, 0, 102, 0.2);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid var(--neon);
-            box-shadow: 0 0 15px rgba(255, 0, 102, 0.4);
         }
+        #welcome-message span {
+            color: var(--neon-red);
+            text-shadow: 0 0 15px var(--neon-red);
+        }
+
+        .user-view { display: none; }
     </style>
 </head>
 <body>
+
     <!-- KIRMIZI YAĞMUR -->
     <div class="rain" id="rain"></div>
-
-    <!-- GİRİŞ EKRANI -->
-    <div class="login-container" id="login-container">
-        <h2 class="neon-glow" style="color: white; font-size: 2.5rem;">GİRİŞ YAP</h2>
-        <input type="text" id="username" class="form-control" placeholder="KULLANICI ADI" required>
-        <input type="password" id="password" class="form-control" placeholder="ŞİFRE" required>
-        <button id="login-btn" class="btn">GİRİŞ</button>
-        <div id="login-error" style="display: none;"></div>
-    </div>
 
     <!-- ANA İÇERİK -->
     <div id="main-content" style="display: none;">
@@ -272,7 +214,7 @@
                 <nav class="navbar navbar-expand-lg">
                     <a class="navbar-brand" href="index.html">CLAWY<span>1337</span></a>
                     <div class="ms-auto d-flex align-items-center">
-                        <span id="welcome-message"></span>
+                        <span id="welcome-message">HOŞGELDİNİZ <span>OWNER!</span></span>
                         <a href="index.html" class="btn btn-outline-light btn-sm me-2">
                             <i class="fas fa-home"></i> ANA SAYFA
                         </a>
@@ -283,30 +225,44 @@
                 </nav>
             </div>
         </header>
+
         <div class="container">
-            <div class="status-card">
-                <i class="fas fa-satellite-dish status-icon"></i>
-                <h2 class="neon-glow" style="color: white;">ANLIK DURUMUM</h2>
-                <div class="current-status" id="statusText">
-                    <span>AKTİF • YENİ KENT MAHALLESİ</span>
+            <div class="status-box">
+                <i class="fas fa-satellite-dish status-icon" id="statusIcon"></i>
+                <div class="status-text" id="statusText">YÜKLENİYOR...</div>
+                <div class="location" id="locationText">Konum: Bilinmiyor</div>
+                <p class="last-update" id="lastUpdate">Son güncelleme: -</p>
+
+                <!-- SADECE ADMIN GÖRÜR -->
+                <div class="btn-group" id="admin-controls">
+                    <button class="btn-status btn-active" onclick="setStatus('active')">
+                        <i class="fas fa-play"></i> AKTİF
+                    </button>
+                    <button class="btn-status btn-passive" onclick="setStatus('passive')">
+                        <i class="fas fa-pause"></i> PASİF
+                    </button>
                 </div>
-                <p>SON GÜNCELLEME: <span id="lastUpdate">27 EKİM 2025</span></p>
-                <button class="btn btn-edit" onclick="editStatus()" id="editButton" style="display: none;">
-                    <i class="fas fa-edit"></i> DURUMU DEĞİŞTİR
-                </button>
-                <p id="status-message"></p>
+
+                <!-- USER GÖRÜR -->
+                <div class="user-view" id="user-view">
+                    <p style="color: #aaa; margin-top: 20px;">Durum sadece Owner tarafından değiştirilebilir.</p>
+                </div>
+
+                <p id="status-message" style="margin-top: 20px; font-weight: 900;"></p>
             </div>
         </div>
+
         <footer>
-            © 2025 Clawy - Tüm hakları saklıdır.
+            2025 Clawy - Tüm hakları saklıdır.
         </footer>
     </div>
 
     <!-- auth.js -->
     <script src="auth.js" defer></script>
 
-    <!-- KIRMIZI YAĞMUR -->
+    <!-- KONTROL + YAĞMUR -->
     <script>
+        // Yağmur
         const rainContainer = document.getElementById('rain');
         const createDrop = () => {
             const drop = document.createElement('div');
@@ -318,6 +274,100 @@
             setTimeout(() => drop.remove(), 2000);
         };
         setInterval(createDrop, 70);
+
+        // Sayfa yüklendiğinde
+        window.addEventListener('load', () => {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            const username = localStorage.getItem('username');
+
+            if (username && (username === 'admin' || username === 'user')) {
+                document.getElementById('main-content').style.display = 'block';
+
+                // Hoşgeldin mesajı
+                const welcomeSpan = document.querySelector('#welcome-message span');
+                if (isAdmin) {
+                    welcomeSpan.textContent = 'OWNER!';
+                } else {
+                    welcomeSpan.textContent = 'KULLANICI!';
+                    document.getElementById('admin-controls').style.display = 'none';
+                    document.getElementById('user-view').style.display = 'block';
+                }
+
+                fetchStatus();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Durum çek
+        async function fetchStatus() {
+            try {
+                const response = await fetch('/api/status');
+                if (response.ok) {
+                    const data = await response.json();
+                    updateUI(data.status_text.includes('Aktif'), data.status_text, data.last_updated);
+                }
+            } catch (error) {
+                console.error('Hata:', error);
+            }
+        }
+
+        // UI Güncelle
+        function updateUI(isActive, statusText, lastUpdate) {
+            const statusEl = document.getElementById('statusText');
+            const iconEl = document.getElementById('statusIcon');
+            const locationEl = document.getElementById('locationText');
+            const updateEl = document.getElementById('lastUpdate');
+
+            if (isActive) {
+                statusEl.textContent = 'AKTİF';
+                statusEl.className = 'status-text status-active';
+                iconEl.style.color = '#00ff88';
+            } else {
+                statusEl.textContent = 'PASİF';
+                statusEl.className = 'status-text status-passive';
+                iconEl.style.color = '#ff0066';
+            }
+
+            const location = statusText.split('•')[1]?.trim() || 'Bilinmiyor';
+            locationEl.textContent = `Konum: ${location}`;
+            updateEl.textContent = `Son güncelleme: ${lastUpdate}`;
+        }
+
+        // SADECE ADMIN
+        async function setStatus(mode) {
+            if (localStorage.getItem('isAdmin') !== 'true') return;
+
+            const isActive = mode === 'active';
+            const statusText = isActive ? 'Aktif • Yeni Kent Mahallesi' : 'Pasif • Kapalı';
+            const now = new Date().toLocaleString('tr-TR');
+
+            const messageEl = document.getElementById('status-message');
+            try {
+                const response = await fetch('/api/update-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        status_text: statusText,
+                        last_updated: now,
+                        last_updated_by: 'admin'
+                    })
+                });
+
+                if (response.ok) {
+                    messageEl.textContent = 'Durum güncellendi!';
+                    messageEl.style.color = isActive ? '#00ff88' : '#ff0066';
+                    updateUI(isActive, statusText, now);
+                } else {
+                    const err = await response.json();
+                    messageEl.textContent = err.error || 'Hata!';
+                    messageEl.style.color = '#ff6b6b';
+                }
+            } catch (error) {
+                messageEl.textContent = 'Bağlantı hatası!';
+                messageEl.style.color = '#ff6b6b';
+            }
+        }
     </script>
 </body>
 </html>
