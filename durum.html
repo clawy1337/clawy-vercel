@@ -15,10 +15,10 @@
             --neon-red: #ff0066;
             --neon-purple: #cc00ff;
             --neon-yellow: #ffff66;
-            --glow-green: 0 0 25px rgba(0, 255, 136, 0.8);
-            --glow-red: 0 0 25px rgba(255, 0, 102, 0.8);
-            --glow-purple: 0 0 30px rgba(204, 0, 255, 0.7);
-            --glow-yellow: 0 0 20px rgba(255, 255, 102, 0.8);
+            --glow-green: 0 0 30px rgba(0, 255, 136, 0.9);
+            --glow-red: 0 0 30px rgba(255, 0, 102, 0.9);
+            --glow-purple: 0 0 35px rgba(204, 0, 255, 0.7);
+            --glow-yellow: 0 0 25px rgba(255, 255, 102, 0.8);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -75,7 +75,7 @@
         }
 
         .container {
-            padding: 3rem 1rem;
+            padding: 2rem 1rem;
             flex: 1;
             display: flex;
             justify-content: center;
@@ -84,13 +84,14 @@
             z-index: 1;
         }
 
+        /* KÜÇÜK BOX */
         .status-box {
             background: rgba(20, 0, 20, 0.95);
             border: 3px solid transparent;
-            border-radius: 30px;
-            padding: 3rem;
+            border-radius: 25px;
+            padding: 2rem;
             text-align: center;
-            max-width: 520px;
+            max-width: 420px;
             width: 100%;
             box-shadow: 0 0 40px rgba(204, 0, 255, 0.3);
             position: relative;
@@ -102,19 +103,19 @@
             position: absolute;
             top: -3px; left: -3px; right: -3px; bottom: -3px;
             background: linear-gradient(45deg, var(--neon-purple), #ff00ff, #9900cc, var(--neon-purple));
-            border-radius: 33px;
+            border-radius: 28px;
             z-index: -1;
             animation: pulseGlow 2.5s infinite ease-in-out;
             opacity: 0.8;
         }
         @keyframes pulseGlow {
             0%, 100% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.05); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 1; }
         }
 
         .status-icon {
-            font-size: 4.5rem;
-            margin-bottom: 18px;
+            font-size: 3.8rem;
+            margin-bottom: 15px;
             animation: pulseIcon 2s infinite;
         }
         @keyframes pulseIcon {
@@ -122,10 +123,10 @@
             50% { transform: scale(1.08); }
         }
 
-        /* DURUM METNİ - GLOW + RENK */
+        /* DURUM METNİ - GÜÇLÜ GLOW */
         .status-text {
-            font-size: 2.4rem;
-            margin: 18px 0;
+            font-size: 2rem;
+            margin: 15px 0;
             font-weight: 900;
             letter-spacing: 1.5px;
             display: block;
@@ -134,83 +135,91 @@
             color: var(--neon-green) !important;
             text-shadow: 
                 var(--glow-green),
-                0 0 40px rgba(0, 255, 136, 0.5),
-                0 0 60px rgba(0, 255, 136, 0.4) !important;
+                0 0 50px rgba(0, 255, 136, 0.6),
+                0 0 70px rgba(0, 255, 136, 0.4) !important;
         }
         .status-passive { 
             color: var(--neon-red) !important;
             text-shadow: 
                 var(--glow-red),
-                0 0 40px rgba(255, 0, 102, 0.5),
-                0 0 60px rgba(255, 0, 102, 0.4) !important;
+                0 0 50px rgba(255, 0, 102, 0.6),
+                0 0 70px rgba(255, 0, 102, 0.4) !important;
         }
 
-        /* KONUM METNİ - SARI GLOW */
+        /* KONUM - SARI GLOW */
         .location {
-            font-size: 1.4rem;
-            margin: 12px 0;
+            font-size: 1.3rem;
+            margin: 10px 0;
             font-weight: 900;
             color: var(--neon-yellow) !important;
             text-shadow: 
                 var(--glow-yellow),
-                0 0 30px rgba(255, 255, 102, 0.6) !important;
+                0 0 35px rgba(255, 255, 102, 0.7) !important;
             display: block;
         }
 
         .btn-group {
-            margin-top: 28px;
+            margin-top: 22px;
             display: flex;
-            gap: 14px;
+            gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
         }
-        .btn-status, .btn-location {
-            padding: 13px 28px;
+        .btn-status, .btn-location, .btn-faq {
+            padding: 11px 22px;
             border-radius: 50px;
             font-weight: 900;
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             letter-spacing: 1px;
             border: none;
             transition: all 0.35s ease;
-            min-width: 135px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+            min-width: 120px;
+            box-shadow: 0 0 18px rgba(0,0,0,0.4);
         }
         .btn-active {
             background: linear-gradient(45deg, #00cc66, #00ff88);
             color: black;
         }
         .btn-active:hover {
-            transform: translateY(-4px) scale(1.03);
-            box-shadow: 0 0 35px rgba(0, 255, 136, 0.9);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 32px rgba(0, 255, 136, 0.9);
         }
         .btn-passive {
             background: linear-gradient(45deg, #cc0066, #ff3399);
             color: white;
         }
         .btn-passive:hover {
-            transform: translateY(-4px) scale(1.03);
-            box-shadow: 0 0 35px rgba(255, 0, 102, 0.9);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 32px rgba(255, 0, 102, 0.9);
         }
         .btn-location {
             background: linear-gradient(45deg, #cccc00, #ffff66);
             color: black;
         }
         .btn-location:hover {
-            transform: translateY(-4px) scale(1.03);
-            box-shadow: 0 0 35px rgba(255, 255, 102, 0.9);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 32px rgba(255, 255, 102, 0.9);
+        }
+        .btn-faq {
+            background: linear-gradient(45deg, #6600cc, #9933ff);
+            color: white;
+        }
+        .btn-faq:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 32px rgba(153, 51, 255, 0.9);
         }
 
         .last-update {
-            margin-top: 18px;
-            font-size: 0.95rem;
+            margin-top: 15px;
+            font-size: 0.9rem;
             color: #aaa;
         }
 
         footer {
             background: rgba(5,0,5,0.95);
-            padding: 1.4rem;
+            padding: 1.2rem;
             text-align: center;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #ccc;
             border-top: 1px solid var(--neon-red);
             font-weight: 900;
@@ -221,11 +230,11 @@
         #welcome-message {
             color: var(--text);
             font-weight: 900;
-            font-size: 1rem;
+            font-size: 0.95rem;
             margin-right: 10px;
             text-shadow: 0 0 12px var(--neon-purple);
             background: rgba(204, 0, 255, 0.2);
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 20px;
             border: 1px solid var(--neon-purple);
             box-shadow: 0 0 15px rgba(204, 0, 255, 0.4);
@@ -235,7 +244,53 @@
             text-shadow: 0 0 12px var(--neon-purple);
         }
 
-        .user-view { display: none; margin-top: 20px; color: #ccc; font-size: 0.9rem; }
+        .user-view { display: none; margin-top: 18px; color: #ccc; font-size: 0.85rem; }
+
+        /* SSS MODAL */
+        .faq-modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .faq-content {
+            background: rgba(20, 0, 20, 0.98);
+            border: 2px solid var(--neon-purple);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 40px rgba(204, 0, 255, 0.5);
+        }
+        .faq-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.8rem;
+            color: var(--neon-red);
+            cursor: pointer;
+        }
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            padding-bottom: 1rem;
+        }
+        .faq-question {
+            color: var(--neon-purple);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .faq-answer {
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -278,7 +333,10 @@
                         <i class="fas fa-pause"></i> PASİF
                     </button>
                     <button class="btn-status btn-location" onclick="changeLocation()">
-                        <i class="fas fa-map-marker-alt"></i> LOKASYON DEĞİŞTİR
+                        <i class="fas fa-map-marker-alt"></i> LOKASYON
+                    </button>
+                    <button class="btn-status btn-faq" onclick="openFAQ()">
+                        <i class="fas fa-question-circle"></i> SSS
                     </button>
                 </div>
 
@@ -287,7 +345,7 @@
                     <p>Durum sadece Admin tarafından değiştirilebilir.</p>
                 </div>
 
-                <p id="status-message" style="margin-top: 18px; font-weight: 900; font-size: 0.95rem;"></p>
+                <p id="status-message" style="margin-top: 15px; font-weight: 900; font-size: 0.9rem;"></p>
             </div>
         </div>
 
@@ -296,10 +354,42 @@
         </footer>
     </div>
 
+    <!-- SSS MODAL -->
+    <div class="faq-modal" id="faqModal">
+        <div class="faq-content">
+            <span class="faq-close" onclick="closeFAQ()">x</span>
+            <h3 style="color: var(--neon-purple); text-align: center; margin-bottom: 1.5rem;">Sık Sorulan Sorular</h3>
+            <div class="faq-item">
+                <div class="faq-question">Gizliliğe önem veriyor musunuz?</div>
+                <div class="faq-answer">İlk önceliğimiz gizliliktir. IP loglarınız sunucu veritabanında yer alsa da çıkış yap butonuna tıkladığınızda bütün IP ve cihaz bilgileriniz veritabanından kalıcı olarak silinir. Zaten hiçbir isim veya size ait bilgi istemiyoruz.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Verilerim gerçekten siliniyor mu?</div>
+                <div class="faq-answer">Evet, "Çıkış Yap" butonuna tıkladığınız anda IP, cihaz bilgisi ve oturum verileriniz veritabanından kalıcı olarak silinir. Geri dönüşü yoktur.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Kişisel bilgi istiyor musunuz?</div>
+                <div class="faq-answer">Hayır. İsim, e-posta, telefon, adres gibi hiçbir kişisel bilgi talep etmiyoruz. Tamamen anonim kullanım.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Verilerim üçüncü kişilerle paylaşılıyor mu?</div>
+                <div class="faq-answer">Kesinlikle hayır. Ne reklamcılar, ne devlet kurumları, ne de başka bir tarafa veri paylaşımı yapmıyoruz.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Sunucularınız nerede, veri güvenliği nasıl?</div>
+                <div class="faq-answer">Sunucularımız şifreli (AES-256), Avrupa merkezli ve GDPR uyumlu. Fiziksel erişim yalnızca yetkili personel tarafından mümkün.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Çerez (cookie) kullanıyor musunuz?</div>
+                <div class="faq-answer">Sadece oturum çerezi kullanıyoruz, o da çıkışta siliniyor. Kalıcı çerez, izleme çerezi yok.</div>
+            </div>
+        </div>
+    </div>
+
     <!-- auth.js -->
     <script src="auth.js" defer></script>
 
-    <!-- KONTROL + YAĞMUR -->
+    <!-- KONTROL + YAĞMUR + SSS -->
     <script>
         // Yağmur
         const rainContainer = document.getElementById('rain');
@@ -313,6 +403,14 @@
             setTimeout(() => drop.remove(), 2000);
         };
         setInterval(createDrop, 70);
+
+        // SSS
+        function openFAQ() {
+            document.getElementById('faqModal').style.display = 'flex';
+        }
+        function closeFAQ() {
+            document.getElementById('faqModal').style.display = 'none';
+        }
 
         // Sayfa yüklendiğinde
         window.addEventListener('load', () => {
@@ -359,12 +457,10 @@
             const updateEl = document.getElementById('lastUpdate');
             const iconEl = document.getElementById('statusIcon');
 
-            // DURUM: "Aktif • "
             statusEl.textContent = isActive ? 'Aktif • ' : 'Pasif • ';
             statusEl.className = 'status-text ' + (isActive ? 'status-active' : 'status-passive');
             iconEl.style.color = isActive ? '#00ff88' : '#ff0066';
 
-            // KONUM: Sadece "Ankara"
             const locationMatch = statusText.match(/•\s*(.+)$/);
             const location = locationMatch ? locationMatch[1].trim() : 'Bilinmiyor';
             locationEl.textContent = location;
@@ -384,7 +480,6 @@
             await saveStatus(statusText, now);
         }
 
-        // LOKASYON DEĞİŞTİR
         function changeLocation() {
             if (localStorage.getItem('isAdmin') !== 'true') return;
 
