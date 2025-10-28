@@ -1,8 +1,5 @@
 {
-  "name": "clawy-vercel",
-  "version": "1.0.0",
-  "type": "module",
   "dependencies": {
-    "@upstash/redis": "^1.36.0"
+    "@octokit/rest": "^20.1.0"
   }
 }
