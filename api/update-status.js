@@ -8,7 +8,11 @@ export default async function handler(req, res) {
   const token = process.env.GITHUB_TOKEN;
 
   if (!token) return res.status(500).json({ error: 'Token eksik' });
-  if (last_updated_by !== 'clawy') return res.status(403).json({ error: 'Yetkisiz' });
+
+  // SADECE admin DEĞİŞTİREBİLİR
+  if (last_updated_by !== 'admin') {
+    return res.status(403).json({ error: 'Yetkisiz! Sadece admin değiştirebilir.' });
+  }
 
   const octokit = new Octokit({ auth: token });
 
@@ -30,14 +34,15 @@ export default async function handler(req, res) {
       owner: 'clawy1337',
       repo: 'clawy-vercel',
       path: 'data/status.json',
-      message: `Güncelleme: ${status_text}`,
+      message: `Durum güncellendi: ${status_text}`,
       content,
       sha,
       branch: 'main'
     });
 
-    res.status(200).json({ message: 'Kaydedildi!' });
+    res.status(200).json({ message: 'Durum başarıyla kaydedildi!' });
   } catch (error) {
-    res.status(500).json({ error: 'Kaydedilemedi' });
+    console.error('GitHub Hatası:', error.message);
+    res.status(500).json({ error: 'GitHub API hatası', details: error.message });
   }
 }
