@@ -1,8 +1,8 @@
-// auth.js - YENİ KULLANICI: arkadas / 12345
+// auth.js - ARKADAŞ GİREBİLİR: arkadas / 12345
 const users = [
   { username: 'admin',   passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', isAdmin: true },  // admin
   { username: 'user',    passwordHash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', isAdmin: false }, // user
-  { username: 'arkadas', passwordHash: 'e10adc3949ba59abbe56e057f20f883e', isAdmin: false }  // YENİ: 12345
+  { username: 'arkadas', passwordHash: '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', isAdmin: false }  // DOĞRU HASH: 12345
 ];
 
 async function sha256(str) {
@@ -76,12 +76,16 @@ document.getElementById('login-btn')?.addEventListener('click', async () => {
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('main-content').style.display = 'block';
     document.getElementById('welcome-message').innerHTML = `HOŞGELDİNİZ <span>${isAdmin() ? 'OWNER' : 'KULLANICI'}</span>!`;
-    document.getElementById('status-message').textContent = '';
+    document.getElementById('status-message') && (document.getElementById('status-message').textContent = '');
     fetchStatus();
     if (isAdmin()) {
       document.getElementById('editButton')?.style.removeProperty('display');
+      document.getElementById('admin-controls')?.style.removeProperty('display');
+      document.getElementById('user-view')?.style.setProperty('display', 'none');
     } else {
       document.getElementById('editButton')?.style.setProperty('display', 'none');
+      document.getElementById('admin-controls')?.style.setProperty('display', 'none');
+      document.getElementById('user-view')?.style.removeProperty('display');
     }
   }
 });
@@ -95,12 +99,16 @@ window.addEventListener('load', () => {
       document.getElementById('login-container').style.display = 'none';
       document.getElementById('main-content').style.display = 'block';
       document.getElementById('welcome-message').innerHTML = `HOŞGELDİNİZ <span>${isAdmin() ? 'OWNER' : 'KULLANICI'}</span>!`;
-      document.getElementById('status-message').textContent = '';
+      document.getElementById('status-message') && (document.getElementById('status-message').textContent = '');
       fetchStatus();
       if (isAdmin()) {
         document.getElementById('editButton')?.style.removeProperty('display');
+        document.getElementById('admin-controls')?.style.removeProperty('display');
+        document.getElementById('user-view')?.style.setProperty('display', 'none');
       } else {
         document.getElementById('editButton')?.style.setProperty('display', 'none');
+        document.getElementById('admin-controls')?.style.setProperty('display', 'none');
+        document.getElementById('user-view')?.style.removeProperty('display');
       }
     }
   }
@@ -126,57 +134,5 @@ async function fetchStatus() {
     }
   } catch (error) {
     console.error('Hata:', error);
-  }
-}
-
-// Durum güncelle (SADECE ADMIN)
-async function updateStatusJson(newStatus, now) {
-  const messageEl = document.getElementById('status-message');
-  if (!isAdmin()) {
-    messageEl.textContent = 'Yetkisiz erişim!';
-    messageEl.style.color = 'red';
-    return;
-  }
-
-  try {
-    const response = await fetch('/api/update-status', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        status_text: newStatus,
-        last_updated: now,
-        last_updated_by: localStorage.getItem('username')
-      })
-    });
-
-    if (response.ok) {
-      messageEl.textContent = 'Durum başarıyla kaydedildi!';
-      messageEl.style.color = 'green';
-    } else {
-      const errorData = await response.json();
-      messageEl.textContent = errorData.error || 'Kaydedilemedi!';
-      messageEl.style.color = 'red';
-    }
-  } catch (error) {
-    messageEl.textContent = 'Bağlantı hatası!';
-    messageEl.style.color = 'red';
-  }
-}
-
-async function editStatus() {
-  if (!isAdmin()) {
-    const messageEl = document.getElementById('status-message');
-    messageEl.textContent = 'Yetkisiz! Sadece admin değiştirebilir.';
-    messageEl.style.color = 'red';
-    return;
-  }
-
-  const current = document.getElementById('statusText').innerText;
-  const newStatus = prompt('Yeni durum girin:', current);
-  if (newStatus && newStatus.trim() && newStatus.trim() !== current) {
-    const now = new Date().toLocaleString('tr-TR');
-    document.getElementById('statusText').innerText = newStatus.trim();
-    document.getElementById('lastUpdate').innerText = now;
-    await updateStatusJson(newStatus.trim(), now);
   }
 }
