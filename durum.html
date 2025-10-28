@@ -122,28 +122,32 @@
             50% { transform: scale(1.08); }
         }
 
+        /* DURUM METNİ */
         .status-text {
             font-size: 2.4rem;
             margin: 18px 0;
             font-weight: 900;
             letter-spacing: 1.5px;
             transition: all 0.4s ease;
+            display: block;
         }
         .status-active { 
-            color: var(--neon-green); 
-            text-shadow: var(--glow-green), 0 0 40px rgba(0, 255, 136, 0.5); 
+            color: var(--neon-green) !important;
+            text-shadow: var(--glow-green), 0 0 40px rgba(0, 255, 136, 0.5) !important;
         }
         .status-passive { 
-            color: var(--neon-red); 
-            text-shadow: var(--glow-red), 0 0 40px rgba(255, 0, 102, 0.5); 
+            color: var(--neon-red) !important;
+            text-shadow: var(--glow-red), 0 0 40px rgba(255, 0, 102, 0.5) !important;
         }
 
+        /* KONUM METNİ */
         .location {
             font-size: 1.4rem;
             margin: 12px 0;
             font-weight: 900;
-            color: var(--neon-yellow);
-            text-shadow: var(--glow-yellow);
+            color: var(--neon-yellow) !important;
+            text-shadow: var(--glow-yellow) !important;
+            display: block;
         }
 
         .btn-group {
@@ -348,16 +352,15 @@
             const updateEl = document.getElementById('lastUpdate');
             const iconEl = document.getElementById('statusIcon');
 
-            // DURUM: Aktif •  veya Pasif •
-            const statusPart = isActive ? 'Aktif •' : 'Pasif •';
-            statusEl.textContent = statusPart;
+            // DURUM: "Aktif • " (boşluk var!)
+            statusEl.textContent = isActive ? 'Aktif • ' : 'Pasif • ';
             statusEl.className = isActive ? 'status-text status-active' : 'status-text status-passive';
             iconEl.style.color = isActive ? '#00ff88' : '#ff0066';
 
-            // KONUM: Ankara
+            // KONUM: "Ankara"
             const locationMatch = statusText.match(/•\s*(.+)$/);
             const location = locationMatch ? locationMatch[1].trim() : 'Bilinmiyor';
-            locationEl.textContent = `Konum: ${location}`;
+            locationEl.textContent = location;  // Sadece lokasyon adı
 
             updateEl.textContent = `Son güncelleme: ${lastUpdate}`;
         }
@@ -367,7 +370,7 @@
             if (localStorage.getItem('isAdmin') !== 'true') return;
 
             const isActive = mode === 'active';
-            const currentLocation = document.getElementById('locationText').textContent.replace('Konum: ', '');
+            const currentLocation = document.getElementById('locationText').textContent;
             const statusText = isActive ? `Aktif • ${currentLocation}` : `Pasif • ${currentLocation}`;
             const now = new Date().toLocaleString('tr-TR');
 
@@ -380,13 +383,13 @@
 
             const currentStatus = document.getElementById('statusText').textContent;
             const isActive = currentStatus.includes('Aktif');
-            const currentLocation = document.getElementById('locationText').textContent.replace('Konum: ', '');
+            const currentLocation = document.getElementById('locationText').textContent;
 
             const newLocation = prompt('Yeni lokasyon girin:', currentLocation);
             if (newLocation && newLocation.trim() && newLocation.trim() !== currentLocation) {
                 const statusText = isActive ? `Aktif • ${newLocation.trim()}` : `Pasif • ${newLocation.trim()}`;
                 const now = new Date().toLocaleString('tr-TR');
-                document.getElementById('locationText').textContent = `Konum: ${newLocation.trim()}`;
+                document.getElementById('locationText').textContent = newLocation.trim();
                 document.getElementById('lastUpdate').textContent = `Son güncelleme: ${now}`;
                 saveStatus(statusText, now);
             }
@@ -408,7 +411,7 @@
                 if (response.ok) {
                     messageEl.textContent = 'Durum güncellendi!';
                     messageEl.style.color = statusText.includes('Aktif') ? '#00ff88' : '#ff0066';
-                    fetchStatus(); // Yenile
+                    fetchStatus();
                 } else {
                     const err = await response.json();
                     messageEl.textContent = err.error || 'Hata!';
