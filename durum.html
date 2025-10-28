@@ -66,7 +66,7 @@
         .navbar-brand {
             font-family: 'Orbitron', sans-serif;
             color: var(--text) !important;
-            font-weight: 900;
+            font-weight: 900
             font-size: 1.7rem;
         }
         .navbar-brand span {
@@ -75,13 +75,13 @@
         }
 
         .container {
-            padding: 2rem 1rem;
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 1.5rem;
             position: relative;
             z-index: 1;
+            display: flex;
+            justify-content: center;
         }
 
         /* KÜÇÜK BOX */
@@ -89,14 +89,14 @@
             background: rgba(20, 0, 20, 0.95);
             border: 3px solid transparent;
             border-radius: 25px;
-            padding: 2rem;
+            padding: 2.2rem;
             text-align: center;
             max-width: 420px;
             width: 100%;
             box-shadow: 0 0 40px rgba(204, 0, 255, 0.3);
-            position: relative;
             backdrop-filter: blur(15px);
-            transition: all 0.5s ease;
+            position: relative;
+            animation: float 4s ease-in-out infinite;
         }
         .status-box::before {
             content: '';
@@ -112,6 +112,10 @@
             0%, 100% { transform: scale(1); opacity: 0.7; }
             50% { transform: scale(1.03); opacity: 1; }
         }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
         .status-icon {
             font-size: 3.8rem;
@@ -123,7 +127,6 @@
             50% { transform: scale(1.08); }
         }
 
-        /* DURUM METNİ - GÜÇLÜ GLOW */
         .status-text {
             font-size: 2rem;
             margin: 15px 0;
@@ -146,7 +149,6 @@
                 0 0 70px rgba(255, 0, 102, 0.4) !important;
         }
 
-        /* KONUM - SARI GLOW */
         .location {
             font-size: 1.3rem;
             margin: 10px 0;
@@ -215,6 +217,8 @@
             color: #aaa;
         }
 
+        .user-view { display: none; margin-top: 18px; color: #ccc; font-size: 0.85rem; }
+
         footer {
             background: rgba(5,0,5,0.95);
             padding: 1.2rem;
@@ -225,6 +229,7 @@
             font-weight: 900;
             position: relative;
             z-index: 1;
+            margin-top: 3rem;
         }
 
         #welcome-message {
@@ -244,52 +249,11 @@
             text-shadow: 0 0 12px var(--neon-purple);
         }
 
-        .user-view { display: none; margin-top: 18px; color: #ccc; font-size: 0.85rem; }
-
-        /* SSS MODAL */
-        .faq-modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-        .faq-content {
-            background: rgba(20, 0, 20, 0.98);
-            border: 2px solid var(--neon-purple);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 0 40px rgba(204, 0, 255, 0.5);
-        }
-        .faq-close {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 1.8rem;
-            color: var(--neon-red);
-            cursor: pointer;
-        }
-        .faq-item {
-            margin-bottom: 1.5rem;
-            border-bottom: 1px dashed rgba(255,255,255,0.2);
-            padding-bottom: 1rem;
-        }
-        .faq-question {
-            color: var(--neon-purple);
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        .faq-answer {
-            color: #ccc;
-            font-size: 0.95rem;
-            line-height: 1.6;
+        @media (max-width: 600px) {
+            .status-box { padding: 1.8rem; }
+            .status-text { font-size: 1.7rem; }
+            .location { font-size: 1.1rem; }
+            .btn-status { font-size: 0.85rem; padding: 10px 18px; }
         }
     </style>
 </head>
@@ -308,6 +272,9 @@
                         <span id="welcome-message">HOŞGELDİNİZ <span>ADMIN</span>!</span>
                         <a href="index.html" class="btn btn-outline-light btn-sm me-2">
                             <i class="fas fa-home"></i> ANA SAYFA
+                        </a>
+                        <a href="sss.html" class="btn btn-outline-light btn-sm me-2">
+                            <i class="fas fa-comments"></i> SSS
                         </a>
                         <button onclick="logout()" class="btn btn-outline-light btn-sm">
                             <i class="fas fa-sign-out-alt"></i> ÇIKIŞ
@@ -335,9 +302,6 @@
                     <button class="btn-status btn-location" onclick="changeLocation()">
                         <i class="fas fa-map-marker-alt"></i> LOKASYON
                     </button>
-                    <button class="btn-status btn-faq" onclick="openFAQ()">
-                        <i class="fas fa-question-circle"></i> SSS
-                    </button>
                 </div>
 
                 <!-- USER GÖRÜR -->
@@ -354,42 +318,10 @@
         </footer>
     </div>
 
-    <!-- SSS MODAL -->
-    <div class="faq-modal" id="faqModal">
-        <div class="faq-content">
-            <span class="faq-close" onclick="closeFAQ()">x</span>
-            <h3 style="color: var(--neon-purple); text-align: center; margin-bottom: 1.5rem;">Sık Sorulan Sorular</h3>
-            <div class="faq-item">
-                <div class="faq-question">Gizliliğe önem veriyor musunuz?</div>
-                <div class="faq-answer">İlk önceliğimiz gizliliktir. IP loglarınız sunucu veritabanında yer alsa da çıkış yap butonuna tıkladığınızda bütün IP ve cihaz bilgileriniz veritabanından <strong>kalıcı olarak silinir</strong>. Zaten hiçbir isim veya size ait bilgi istemiyoruz.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Verilerim gerçekten siliniyor mu?</div>
-                <div class="faq-answer">Evet, "Çıkış Yap" butonuna tıkladığınız anda IP, cihaz bilgisi ve oturum verileriniz veritabanından <strong>kalıcı olarak silinir</strong>. Geri dönüşü yoktur.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Kişisel bilgi istiyor musunuz?</div>
-                <div class="faq-answer">Hayır. <strong>İsim, e-posta, telefon, adres</strong> gibi hiçbir kişisel bilgi talep etmiyoruz. Tamamen anonim kullanım.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Verilerim üçüncü kişilerle paylaşılıyor mu?</div>
-                <div class="faq-answer"><strong>Kesinlikle hayır.</strong> Ne reklamcılar, ne devlet kurumları, ne de başka bir tarafa veri paylaşımı yapmıyoruz.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Sunucularınız nerede, veri güvenliği nasıl?</div>
-                <div class="faq-answer">Sunucularımız <strong>şifreli (AES-256)</strong>, Avrupa merkezli ve GDPR uyumlu. Fiziksel erişim yalnızca yetkili personel tarafından mümkün.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Çerez (cookie) kullanıyor musunuz?</div>
-                <div class="faq-answer">Sadece <strong>oturum çerezi</strong> kullanıyoruz, o da çıkışta siliniyor. Kalıcı çerez, izleme çerezi <strong>yok</strong>.</div>
-            </div>
-        </div>
-    </div>
-
     <!-- auth.js -->
     <script src="auth.js" defer></script>
 
-    <!-- KONTROL + YAĞMUR + SSS -->
+    <!-- KONTROL + YAĞMUR -->
     <script>
         // Yağmur
         const rainContainer = document.getElementById('rain');
@@ -403,14 +335,6 @@
             setTimeout(() => drop.remove(), 2000);
         };
         setInterval(createDrop, 70);
-
-        // SSS
-        function openFAQ() {
-            document.getElementById('faqModal').style.display = 'flex';
-        }
-        function closeFAQ() {
-            document.getElementById('faqModal').style.display = 'none';
-        }
 
         // Sayfa yüklendiğinde
         window.addEventListener('load', () => {
