@@ -1,345 +1,182 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Clawy1337 | @istkanalstatusbot</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet"/>
-    <style>
-        :root {
-            --bg: #000000;
-            --text: #ffffff;
-            --neon-green: #00ff88;
-            --neon-red: #ff0066;
-            --neon-purple: #cc00ff;
-            --glow-green: 0 0 25px rgba(0, 255, 136, 0.8);
-            --glow-red: 0 0 25px rgba(255, 0, 102, 0.8);
-            --glow-purple: 0 0 30px rgba(204, 0, 255, 0.7);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Arial Black', 'Helvetica', sans-serif;
-            font-weight: 900;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            letter-spacing: 0.5px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ana Sayfa</title>
+  <style>
+    /* Genel Stil */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f7fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
 
-        /* KIRMIZI YAĞMUR */
-        .rain {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .drop {
-            position: absolute;
-            width: 2px;
-            height: 60px;
-            background: linear-gradient(transparent, var(--neon-red));
-            opacity: 0.6;
-            animation: fall linear infinite;
-        }
-        @keyframes fall {
-            0% { transform: translateY(-100vh); }
-            100% { transform: translateY(100vh); }
-        }
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
 
-        header {
-            background: rgba(10, 0, 10, 0.95);
-            backdrop-filter: blur(15px);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--neon-red);
-            box-shadow: 0 0 20px rgba(255, 0, 102, 0.5);
-        }
-        .navbar-brand {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--text) !important;
-            font-weight: 900;
-            font-size: 1.7rem;
-        }
-        .navbar-brand span {
-            color: var(--neon-red);
-            text-shadow: 0 0 15px var(--neon-red);
-        }
+    h1 {
+      text-align: center;
+      color: #1a5d1a;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
 
-        .hero {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 3rem 1rem;
-            position: relative;
-            z-index: 1;
-        }
+    /* SSS Bölümü */
+    .faq-section {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
 
-        .profile-img {
-            width: 160px; height: 160px;
-            border-radius: 50%;
-            border: 5px solid var(--neon-red);
-            box-shadow: 
-                0 0 20px var(--neon-red),
-                0 0 40px var(--neon-red);
-            margin: 0 auto 20px;
-            background: radial-gradient(circle, #1a0000, #000000);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: var(--neon-red);
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
+    .faq-item {
+      border-bottom: 1px solid #e0e6ed;
+    }
 
-        h1 {
-            font-size: 3.8rem;
-            margin: 15px 0;
-            color: var(--text);
-            font-weight: 900;
-            letter-spacing: 2px;
-        }
-        h1 span {
-            color: var(--neon-red);
-            text-shadow: 0 0 20px var(--neon-red);
-        }
+    .faq-item:last-child {
+      border-bottom: none;
+    }
 
-        .badge-custom {
-            background: rgba(255, 0, 102, 0.2);
-            color: var(--text);
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 1rem;
-            margin: 5px;
-            border: 1px solid var(--neon-red);
-            box-shadow: 0 0 15px rgba(255, 0, 102, 0.5);
-            font-weight: 900;
-            letter-spacing: 1px;
-        }
+    .faq-question {
+      padding: 18px 20px;
+      background: #f9fbfc;
+      cursor: pointer;
+      font-weight: 600;
+      color: #1a5d1a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+      font-size: 1.05rem;
+    }
 
-        .btn-telegram {
-            background: linear-gradient(45deg, #cc0066, #ff3399);
-            color: white;
-            padding: 16px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 900;
-            box-shadow: 0 0 25px rgba(255, 0, 102, 0.7);
-            transition: all 0.4s;
-            margin-top: 20px;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-        }
-        .btn-telegram:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 0 40px rgba(255, 0, 102, 0.9);
-        }
+    .faq-question:hover {
+      background: #eef5ee;
+    }
 
-        .description {
-            max-width: 700px;
-            margin: 25px auto;
-            line-height: 1.8;
-            font-size: 1.1rem;
-            color: var(--text);
-            font-weight: 900;
-            letter-spacing: 0.5px;
-        }
+    .faq-question::after {
+      content: '+';
+      font-size: 1.4rem;
+      color: #1a5d1a;
+      transition: transform 0.3s;
+    }
 
-        footer {
-            background: rgba(5,0,5,0.95);
-            padding: 1.5rem;
-            text-align: center;
-            font-size: 1rem;
-            color: #ccc;
-            border-top: 1px solid var(--neon-red);
-            font-weight: 900;
-            position: relative;
-            z-index: 1;
-        }
+    .faq-item.active .faq-question::after {
+      content: '−';
+      transform: rotate(0);
+    }
 
-        /* GİRİŞ EKRANI */
-        .login-container {
-            background: rgba(10, 0, 10, 0.95);
-            border: 3px solid transparent;
-            border-radius: 30px;
-            padding: 2.5rem;
-            margin: 2rem auto;
-            max-width: 450px;
-            text-align: center;
-            box-shadow: 0 0 40px rgba(204, 0, 255, 0.3);
-            backdrop-filter: blur(15px);
-            position: relative;
-            z-index: 2;
-        }
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: -3px; left: -3px; right: -3px; bottom: -3px;
-            background: linear-gradient(45deg, var(--neon-purple), #ff00ff, #9900cc, var(--neon-purple));
-            border-radius: 33px;
-            z-index: -1;
-            animation: pulseGlow 2.5s infinite ease-in-out;
-            opacity: 0.8;
-        }
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.05); opacity: 1; }
-        }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 20px;
+      background: #ffffff;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      font-size: 0.98rem;
+      color: #444;
+    }
 
-        .login-container input {
-            background: rgba(20, 0, 20, 0.8);
-            border: 1px solid var(--neon-red);
-            color: var(--text);
-            margin-bottom: 15px;
-            border-radius: 15px;
-            padding: 14px;
-            font-weight: 900;
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .login-container input::placeholder {
-            color: #aaa;
-            font-weight: 900;
-            font-size: 1.3rem;
-            text-transform: uppercase;
-        }
-        .login-container button {
-            background: linear-gradient(45deg, var(--neon-red), #ff3399);
-            border: none;
-            padding: 14px 32px;
-            border-radius: 50px;
-            box-shadow: 0 0 20px var(--neon-red);
-            font-weight: 900;
-            color: white;
-            transition: 0.3s;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-        }
-        .login-container button:hover {
-            background: #ff0066;
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px var(--neon-red);
-        }
-        #login-error {
-            color: #ff6b6b;
-            margin-top: 10px;
-            font-weight: 900;
-            font-size: 1.1rem;
-        }
+    .faq-item.active .faq-answer {
+      max-height: 200px; /* Yeterli yükseklik */
+      padding: 18px 20px;
+    }
 
-        #welcome-message {
-            color: var(--text);
-            font-weight: 900;
-            font-size: 1rem;
-            margin-right: 10px;
-            text-shadow: 0 0 12px var(--neon-purple);
-            background: rgba(204, 0, 255, 0.2);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid var(--neon-purple);
-            box-shadow: 0 0 15px rgba(204, 0, 255, 0.4);
-        }
-        #welcome-message span {
-            color: var(--neon-purple);
-            text-shadow: 0 0 12px var(--neon-purple);
-        }
-    </style>
+    /* Mobil Uyum */
+    @media (max-width: 600px) {
+      .faq-question {
+        font-size: 1rem;
+        padding: 15px;
+      }
+      .faq-answer {
+        font-size: 0.94rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- KIRMIZI YAĞMUR -->
-    <div class="rain" id="rain"></div>
+  <div class="container">
+    <h1>Sıkça Sorulan Sorular</h1>
 
-    <!-- GİRİŞ EKRANI -->
-    <div class="login-container" id="login-container">
-        <h2 style="color: white; font-size: 2.5rem; font-weight: 900;">GİRİŞ YAP</h2>
-        <input type="text" id="username" class="form-control" placeholder="KULLANICI ADI" required>
-        <input type="password" id="password" class="form-control" placeholder="ŞİFRE" required>
-        <button id="login-btn" class="btn">GİRİŞ</button>
-        <div id="login-error" style="display: none;"></div>
+    <div class="faq-section">
+
+      <!-- 1 -->
+      <div class="faq-item">
+        <div class="faq-question">Gizliliğe önem veriyor musunuz?</div>
+        <div class="faq-answer">
+          İlk önceliğimiz gizliliktir. IP loglarınız sunucu veritabanında yer alsa da çıkış yap butonuna tıkladığınızda bütün IP ve cihaz bilgileriniz veritabanından <strong>kalıcı olarak silinir</strong>. Zaten hiçbir isim veya size ait bilgi istemiyoruz.
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="faq-item">
+        <div class="faq-question">Verilerim gerçekten siliniyor mu?</div>
+        <div class="faq-answer">
+          Evet, "Çıkış Yap" butonuna tıkladığınız anda IP, cihaz bilgisi ve oturum verileriniz veritabanından <strong>kalıcı olarak silinir</strong>. Geri dönüşü yoktur.
+        </div>
+      </div>
+
+      <!-- 3 (Eski 4) -->
+      <div class="faq-item">
+        <div class="faq-question">Kişisel bilgi istiyor musunuz?</div>
+        <div class="faq-answer">
+          Hayır. <strong>İsim, e-posta, telefon, adres</strong> gibi hiçbir kişisel bilgi talep etmiyoruz. Tamamen anonim kullanım.
+        </div>
+      </div>
+
+      <!-- 4 (Eski 5) -->
+      <div class="faq-item">
+        <div class="faq-question">Verilerim üçüncü kişilerle paylaşılıyor mu?</div>
+        <div class="faq-answer">
+          <strong>Kesinlikle hayır.</strong> Ne reklamcılar, ne devlet kurumları, ne de başka bir tarafa veri paylaşımı yapmıyoruz.
+        </div>
+      </div>
+
+      <!-- 5 (Eski 7) -->
+      <div class="faq-item">
+        <div class="faq-question">Sunucularınız nerede, veri güvenliği nasıl?</div>
+        <div class="faq-answer">
+          Sunucularımız <strong>şifreli (AES-256)</strong>, Avrupa merkezli ve GDPR uyumlu. Fiziksel erişim yalnızca yetkili personel tarafından mümkün.
+        </div>
+      </div>
+
+      <!-- 6 (Eski 9) -->
+      <div class="faq-item">
+        <div class="faq-question">Çerez (cookie) kullanıyor musunuz?</div>
+        <div class="faq-answer">
+          Sadece <strong>oturum çerezi</strong> kullanıyoruz, o da çıkışta siliniyor. Kalıcı çerez, izleme çerezi <strong>yok</strong>.
+        </div>
+      </div>
+
     </div>
+  </div>
 
-    <!-- ANA İÇERİK -->
-    <div id="main-content" style="display: none;">
-        <header>
-            <div class="container">
-                <nav class="navbar navbar-expand-lg">
-                    <a class="navbar-brand" href="#">CLAWY<span>1337</span></a>
-                    <div class="ms-auto d-flex align-items-center">
-                        <span id="welcome-message">HOŞGELDİNİZ <span>ADMIN</span>!</span>
-                        <a href="durum.html" class="btn btn-outline-light btn-sm me-2">
-                            <i class="fas fa-circle-dot"></i> DURUM
-                        </a>
-                        <button onclick="logout()" class="btn btn-outline-light btn-sm">
-                            <i class="fas fa-sign-out-alt"></i> ÇIKIŞ
-                        </button>
-                    </div>
-                </nav>
-            </div>
-        </header>
+  <!-- Accordion JS -->
+  <script>
+    document.querySelectorAll('.faq-question').forEach(item => {
+      item.addEventListener('click', () => {
+        const parent = item.parentElement;
+        const isActive = parent.classList.contains('active');
 
-        <section class="hero">
-            <div>
-                <div class="profile-img">
-                    <i class="fas fa-user-secret"></i>
-                </div>
-                <h1>MERHABA! BEN <span>CLAWY</span></h1>
-                <p class="description">
-                    KANAL DURUMU KONTROLÜ ARTIK SENİN ELİNDE!
-                </p>
-                <p class="description">
-                    TELEGRAM KULLANMAK İSTEMEYENLER İÇİN BU SİTEYİ KENDİM KODLADIM.
-                </p>
-                <div>
-                    <span class="badge-custom">PYTHON</span>
-                    <span class="badge-custom">NODE.JS</span>
-                    <span class="badge-custom">VERCEL</span>
-                    <span class="badge-custom">TELEGRAM BOT</span>
-                </div>
-                <br>
-                <a href="https://t.me/istkanalstatusbot" class="btn-telegram" target="_blank">
-                    <i class="fab fa-telegram-plane"></i> @ISTKANALSTATUSBOT
-                </a>
-            </div>
-        </section>
+        // Tümünü kapat
+        document.querySelectorAll('.faq-item').forEach(el => {
+          el.classList.remove('active');
+        });
 
-        <footer>
-            2025 Clawy - Tüm hakları saklıdır.
-        </footer>
-    </div>
+        // Sadece tıklanan açılsın (isteğe göre hepsi açık kalabilir)
+        if (!isActive) {
+          parent.classList.add('active');
+        }
+      });
+    });
+  </script>
 
-    <!-- auth.js -->
-    <script src="auth.js" defer></script>
-
-    <!-- KIRMIZI YAĞMUR -->
-    <script>
-        const rainContainer = document.getElementById('rain');
-        const createDrop = () => {
-            const drop = document.createElement('div');
-            drop.classList.add('drop');
-            drop.style.left = Math.random() * 100 + 'vw';
-            drop.style.animationDuration = Math.random() * 0.8 + 0.4 + 's';
-            drop.style.opacity = Math.random() * 0.5 + 0.3;
-            rainContainer.appendChild(drop);
-            setTimeout(() => drop.remove(), 2000);
-        };
-        setInterval(createDrop, 70);
-    </script>
 </body>
 </html>
