@@ -1,30 +1,21 @@
-let redis;
-
-async function getRedis() {
-  if (!redis) {
-    const { Redis } = await import('@upstash/redis');
-    redis = new Redis({
-      url: process.env.KV_REST_API_URL,
-      token: process.env.KV_REST_API_TOKEN,
-    });
-  }
-  return redis;
-}
+// api/status.js
+import { Octokit } from "@octokit/rest";
 
 export default async function handler(req, res) {
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) return res.status(500).json({ error: 'Token eksik' });
+
+  const octokit = new Octokit({ auth: token });
+
   try {
-    const kv = await getRedis();
-    const data = await kv.get('status');
-    if (!data) {
-      return res.status(200).json({
-        status_text: 'Aktif • Yeni Kent Mahallesi',
-        last_updated: '27 Ekim 2025',
-        last_updated_by: ''
-      });
-    }
-    return res.status(200).json(data);
+    const { data } = await octokit.repos.getContent({
+      owner: 'clawy1337',
+      repo: 'clawy-vercel',
+      path: 'data/status.json'
+    });
+    const content = Buffer.from(data.content, 'base64').toString('utf8');
+    res.status(200).json(JSON.parse(content));
   } catch (error) {
-    console.error('KV OKUMA HATASI:', error);
-    return res.status(500).json({ error: 'Okunamadı', details: error.message });
+    res.status(500).json({ error: 'Okunamadı' });
   }
 }
