@@ -122,31 +122,38 @@
             50% { transform: scale(1.08); }
         }
 
-        /* DURUM METNİ */
+        /* DURUM METNİ - GLOW + RENK */
         .status-text {
             font-size: 2.4rem;
             margin: 18px 0;
             font-weight: 900;
             letter-spacing: 1.5px;
-            transition: all 0.4s ease;
             display: block;
         }
         .status-active { 
             color: var(--neon-green) !important;
-            text-shadow: var(--glow-green), 0 0 40px rgba(0, 255, 136, 0.5) !important;
+            text-shadow: 
+                var(--glow-green),
+                0 0 40px rgba(0, 255, 136, 0.5),
+                0 0 60px rgba(0, 255, 136, 0.4) !important;
         }
         .status-passive { 
             color: var(--neon-red) !important;
-            text-shadow: var(--glow-red), 0 0 40px rgba(255, 0, 102, 0.5) !important;
+            text-shadow: 
+                var(--glow-red),
+                0 0 40px rgba(255, 0, 102, 0.5),
+                0 0 60px rgba(255, 0, 102, 0.4) !important;
         }
 
-        /* KONUM METNİ */
+        /* KONUM METNİ - SARI GLOW */
         .location {
             font-size: 1.4rem;
             margin: 12px 0;
             font-weight: 900;
             color: var(--neon-yellow) !important;
-            text-shadow: var(--glow-yellow) !important;
+            text-shadow: 
+                var(--glow-yellow),
+                0 0 30px rgba(255, 255, 102, 0.6) !important;
             display: block;
         }
 
@@ -259,7 +266,7 @@
             <div class="status-box" id="statusBox">
                 <i class="fas fa-satellite-dish status-icon" id="statusIcon"></i>
                 <div class="status-text" id="statusText">YÜKLENİYOR...</div>
-                <div class="location" id="locationText">Konum: Bilinmiyor</div>
+                <div class="location" id="locationText">Bilinmiyor</div>
                 <p class="last-update" id="lastUpdate">Son güncelleme: -</p>
 
                 <!-- SADECE ADMIN GÖRÜR -->
@@ -352,15 +359,15 @@
             const updateEl = document.getElementById('lastUpdate');
             const iconEl = document.getElementById('statusIcon');
 
-            // DURUM: "Aktif • " (boşluk var!)
+            // DURUM: "Aktif • "
             statusEl.textContent = isActive ? 'Aktif • ' : 'Pasif • ';
-            statusEl.className = isActive ? 'status-text status-active' : 'status-text status-passive';
+            statusEl.className = 'status-text ' + (isActive ? 'status-active' : 'status-passive');
             iconEl.style.color = isActive ? '#00ff88' : '#ff0066';
 
-            // KONUM: "Ankara"
+            // KONUM: Sadece "Ankara"
             const locationMatch = statusText.match(/•\s*(.+)$/);
             const location = locationMatch ? locationMatch[1].trim() : 'Bilinmiyor';
-            locationEl.textContent = location;  // Sadece lokasyon adı
+            locationEl.textContent = location;
 
             updateEl.textContent = `Son güncelleme: ${lastUpdate}`;
         }
