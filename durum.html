@@ -151,7 +151,7 @@
             justify-content: center;
             flex-wrap: wrap;
         }
-        .btn-status {
+        .btn-status, .btn-location {
             padding: 13px 28px;
             border-radius: 50px;
             font-weight: 900;
@@ -177,6 +177,14 @@
         .btn-passive:hover {
             transform: translateY(-4px) scale(1.03);
             box-shadow: 0 0 35px rgba(255, 0, 102, 0.9);
+        }
+        .btn-location {
+            background: linear-gradient(45deg, #cccc00, #ffff66);
+            color: black;
+        }
+        .btn-location:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 0 35px rgba(255, 255, 102, 0.9);
         }
 
         .last-update {
@@ -249,6 +257,9 @@
                     </button>
                     <button class="btn-status btn-passive" onclick="setStatus('passive')">
                         <i class="fas fa-pause"></i> PASİF
+                    </button>
+                    <button class="btn-status btn-location" onclick="changeLocation()">
+                        <i class="fas fa-map-marker-alt"></i> LOKASYON DEĞİŞTİR
                     </button>
                 </div>
 
@@ -328,7 +339,6 @@
             const iconEl = document.getElementById('statusIcon');
             const locationEl = document.getElementById('locationText');
             const updateEl = document.getElementById('lastUpdate');
-            const boxEl = document.getElementById('statusBox');
 
             if (isActive) {
                 statusEl.textContent = 'AKTİF';
@@ -350,9 +360,32 @@
             if (localStorage.getItem('isAdmin') !== 'true') return;
 
             const isActive = mode === 'active';
-            const statusText = isActive ? 'Aktif • Yeni Kent Mahallesi' : 'Pasif • Kapalı';
+            const currentLocation = document.getElementById('locationText').textContent.replace('Konum: ', '');
+            const statusText = isActive ? `Aktif • ${currentLocation}` : `Pasif • ${currentLocation}`;
             const now = new Date().toLocaleString('tr-TR');
 
+            await saveStatus(statusText, now);
+        }
+
+        // LOKASYON DEĞİŞTİR
+        function changeLocation() {
+            if (localStorage.getItem('isAdmin') !== 'true') return;
+
+            const currentStatus = document.getElementById('statusText').textContent;
+            const currentLocation = document.getElementById('locationText').textContent.replace('Konum: ', '');
+            const isActive = currentStatus === 'AKTİF';
+
+            const newLocation = prompt('Yeni lokasyon girin:', currentLocation);
+            if (newLocation && newLocation.trim() && newLocation.trim() !== currentLocation) {
+                const statusText = isActive ? `Aktif • ${newLocation.trim()}` : `Pasif • ${newLocation.trim()}`;
+                const now = new Date().toLocaleString('tr-TR');
+                document.getElementById('locationText').textContent = `Konum: ${newLocation.trim()}`;
+                document.getElementById('lastUpdate').textContent = `Son güncelleme: ${now}`;
+                saveStatus(statusText, now);
+            }
+        }
+
+        async function saveStatus(statusText, now) {
             const messageEl = document.getElementById('status-message');
             try {
                 const response = await fetch('/api/update-status', {
@@ -367,8 +400,8 @@
 
                 if (response.ok) {
                     messageEl.textContent = 'Durum güncellendi!';
-                    messageEl.style.color = isActive ? '#00ff88' : '#ff0066';
-                    updateUI(isActive, statusText, now);
+                    messageEl.style.color = statusText.includes('Aktif') ? '#00ff88' : '#ff0066';
+                    fetchStatus(); // Yenile
                 } else {
                     const err = await response.json();
                     messageEl.textContent = err.error || 'Hata!';
