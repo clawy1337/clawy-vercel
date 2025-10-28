@@ -1,4 +1,4 @@
-// auth.js - TAM DÜZELTME: user/user çalışıyor, hata login ekranında, durum kaydediliyor
+// auth.js - KESİN ÇALIŞIR: user girer, admin değiştirir, alert yok
 const users = [
   { username: 'admin', passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', isAdmin: true },  // admin
   { username: 'user',  passwordHash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', isAdmin: false }   // user
@@ -12,7 +12,6 @@ async function sha256(str) {
 }
 
 async function checkLogin(username, password) {
-  // Oturum kontrolü
   const savedUsername = localStorage.getItem('username');
   const savedHash = localStorage.getItem('passwordHash');
   if (savedUsername && savedHash) {
@@ -75,6 +74,7 @@ document.getElementById('login-btn')?.addEventListener('click', async () => {
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('main-content').style.display = 'block';
     document.getElementById('welcome-message').textContent = `Hoş geldin, ${username}!`;
+    document.getElementById('status-message').textContent = '';
     fetchStatus();
   }
 });
@@ -88,6 +88,7 @@ window.addEventListener('load', () => {
       document.getElementById('login-container').style.display = 'none';
       document.getElementById('main-content').style.display = 'block';
       document.getElementById('welcome-message').textContent = `Hoş geldin, ${savedUsername}!`;
+      document.getElementById('status-message').textContent = '';
       fetchStatus();
     }
   }
@@ -97,6 +98,7 @@ window.addEventListener('load', () => {
 async function fetchStatus() {
   const statusTextEl = document.getElementById('statusText');
   const lastUpdateEl = document.getElementById('lastUpdate');
+  const messageEl = document.getElementById('status-message');
   if (!statusTextEl || !lastUpdateEl) return;
 
   if (!localStorage.getItem('username')) {
@@ -110,16 +112,16 @@ async function fetchStatus() {
       const data = await response.json();
       statusTextEl.innerText = data.status_text;
       lastUpdateEl.innerText = data.last_updated;
-    } else {
-      console.error('API Hatası:', response.status);
+      if (messageEl) messageEl.textContent = '';
     }
   } catch (error) {
-    console.error('Bağlantı hatası:', error);
+    console.error('Hata:', error);
   }
 }
 
 // Durum güncelle
 async function updateStatusJson(newStatus, now) {
+  const messageEl = document.getElementById('status-message');
   try {
     const response = await fetch('/api/update-status', {
       method: 'POST',
@@ -132,18 +134,26 @@ async function updateStatusJson(newStatus, now) {
     });
 
     if (response.ok) {
-      alert('Durum başarıyla kaydedildi!');
+      if (messageEl) messageEl.textContent = 'Durum başarıyla kaydedildi!';
+      if (messageEl) messageEl.style.color = 'green';
     } else {
-      const errorText = await response.text();
-      alert('Kaydedilemedi! Hata: ' + errorText);
+      const errorData = await response.json();
+      if (messageEl) messageEl.textContent = errorData.error || 'Kaydedilemedi!';
+      if (messageEl) messageEl.style.color = 'red';
     }
   } catch (error) {
-    alert('Bağlantı hatası: ' + error.message);
+    if (messageEl) messageEl.textContent = 'Bağlantı hatası!';
+    if (messageEl) messageEl.style.color = 'red';
   }
 }
 
 async function editStatus() {
-  if (!isAdmin()) return alert('Yetkiniz yok! Sadece admin değiştirebilir.');
+  if (!isAdmin()) {
+    const messageEl = document.getElementById('status-message');
+    if (messageEl) messageEl.textContent = 'Yetkiniz yok! Sadece admin değiştirebilir.';
+    if (messageEl) messageEl.style.color = 'red';
+    return;
+  }
 
   const current = document.getElementById('statusText').innerText;
   const newStatus = prompt('Yeni durum girin:', current);
