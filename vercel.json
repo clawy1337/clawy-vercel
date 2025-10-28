@@ -1,23 +1,15 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    }
+  "redirects": [
+    { "source": "/data/status.json", "destination": "/404", "statusCode": 301 },
+    { "source": "/status.json", "destination": "/404", "statusCode": 301 }
   ],
-  "routes": [
+  "headers": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "no-referrer" }
+      ]
     }
-  ],
-  "functions": {
-    "api/update-status.js": {
-      "runtime": "nodejs18.x"
-    },
-    "api/status.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  ]
 }
