@@ -1,4 +1,4 @@
-// auth.js - YENİ HASH'LER, KESİN ÇALIŞIR
+// auth.js - OWNER & KULLANICI MESAJLARI
 const users = [
   { username: 'admin', passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', isAdmin: true },
   { username: 'user',  passwordHash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', isAdmin: false }
@@ -23,7 +23,7 @@ async function checkLogin(username, password) {
   }
 
   if (!username || !password) {
-    showLoginError('Lütfen kullanıcı adı ve şifre girin!');
+    showLoginError('LÜTFEN KULLANICI ADI VE ŞİFRE GİRİN!');
     return null;
   }
 
@@ -36,7 +36,7 @@ async function checkLogin(username, password) {
     clearLoginError();
     return user;
   } else {
-    showLoginError('Yanlış kullanıcı adı veya şifre!');
+    showLoginError('YANLIŞ KULLANICI ADI VEYA ŞİFRE!');
     return null;
   }
 }
@@ -74,7 +74,7 @@ document.getElementById('login-btn')?.addEventListener('click', async () => {
   if (user) {
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('main-content').style.display = 'block';
-    document.getElementById('welcome-message').textContent = 'Hoşgeldin Sahip';
+    document.getElementById('welcome-message').textContent = user.isAdmin ? 'HOŞGELDİNİZ OWNER!' : 'HOŞGELDİNİZ KULLANICI!';
     document.getElementById('status-message').textContent = '';
     fetchStatus();
     if (isAdmin()) {
@@ -93,7 +93,7 @@ window.addEventListener('load', () => {
     if (user) {
       document.getElementById('login-container').style.display = 'none';
       document.getElementById('main-content').style.display = 'block';
-      document.getElementById('welcome-message').textContent = 'Hoşgeldin Sahip';
+      document.getElementById('welcome-message').textContent = user.isAdmin ? 'HOŞGELDİNİZ OWNER!' : 'HOŞGELDİNİZ KULLANICI!';
       document.getElementById('status-message').textContent = '';
       fetchStatus();
       if (isAdmin()) {
@@ -112,7 +112,7 @@ async function fetchStatus() {
   if (!statusTextEl || !lastUpdateEl) return;
 
   if (!localStorage.getItem('username')) {
-    statusTextEl.innerText = 'Giriş yapın';
+    statusTextEl.innerText = 'GİRİŞ YAPIN';
     return;
   }
 
@@ -120,7 +120,7 @@ async function fetchStatus() {
     const response = await fetch('/api/status');
     if (response.ok) {
       const data = await response.json();
-      statusTextEl.innerText = data.status_text;
+      statusTextEl.innerHTML = `<span>${data.status_text}</span>`;
       lastUpdateEl.innerText = data.last_updated;
     }
   } catch (error) {
@@ -143,32 +143,32 @@ async function updateStatusJson(newStatus, now) {
     });
 
     if (response.ok) {
-      if (messageEl) messageEl.textContent = 'Durum başarıyla kaydedildi!';
-      if (messageEl) messageEl.style.color = 'green';
+      if (messageEl) messageEl.textContent = 'DURUM BAŞARIYLA KAYDEDİLDİ!';
+      if (messageEl) messageEl.style.color = '#00ff88';
     } else {
       const errorData = await response.json();
-      if (messageEl) messageEl.textContent = errorData.error || 'Kaydedilemedi!';
-      if (messageEl) messageEl.style.color = 'red';
+      if (messageEl) messageEl.textContent = errorData.error || 'KAYDEDİLEMEDİ!';
+      if (messageEl) messageEl.style.color = '#ff6b6b';
     }
   } catch (error) {
-    if (messageEl) messageEl.textContent = 'Bağlantı hatası!';
-    if (messageEl) messageEl.style.color = 'red';
+    if (messageEl) messageEl.textContent = 'BAĞLANTI HATASI!';
+    if (messageEl) messageEl.style.color = '#ff6b6b';
   }
 }
 
 async function editStatus() {
   if (!isAdmin()) {
     const messageEl = document.getElementById('status-message');
-    if (messageEl) messageEl.textContent = 'Yetkisiz! Sadece admin değiştirebilir.';
-    if (messageEl) messageEl.style.color = 'red';
+    if (messageEl) messageEl.textContent = 'YETKİSİZ! SADECE OWNER DEĞİŞTİREBİLİR.';
+    if (messageEl) messageEl.style.color = '#ff6b6b';
     return;
   }
 
   const current = document.getElementById('statusText').innerText;
-  const newStatus = prompt('Yeni durum girin:', current);
+  const newStatus = prompt('YENİ DURUM GİRİN:', current);
   if (newStatus && newStatus.trim() && newStatus.trim() !== current) {
     const now = new Date().toLocaleString('tr-TR');
-    document.getElementById('statusText').innerText = newStatus.trim();
+    document.getElementById('statusText').innerHTML = `<span>${newStatus.trim()}</span>`;
     document.getElementById('lastUpdate').innerText = now;
     await updateStatusJson(newStatus.trim(), now);
   }
