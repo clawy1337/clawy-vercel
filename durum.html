@@ -13,10 +13,10 @@
             --text: #ffffff;
             --neon-green: #00ff88;
             --neon-red: #ff0066;
-            --neon-yellow: #ffff00;
-            --glow-green: 0 0 20px rgba(0, 255, 136, 0.8);
-            --glow-red: 0 0 20px rgba(255, 0, 102, 0.8);
-            --glow-yellow: 0 0 20px rgba(255, 255, 0, 0.8);
+            --neon-purple: #cc00ff;
+            --glow-green: 0 0 25px rgba(0, 255, 136, 0.8);
+            --glow-red: 0 0 25px rgba(255, 0, 102, 0.8);
+            --glow-purple: 0 0 30px rgba(204, 0, 255, 0.7);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -59,13 +59,13 @@
             top: 0;
             z-index: 100;
             border-bottom: 1px solid var(--neon-red);
-            box-shadow: var(--glow-red);
+            box-shadow: 0 0 20px rgba(255, 0, 102, 0.5);
         }
         .navbar-brand {
             font-family: 'Orbitron', sans-serif;
             color: var(--text) !important;
             font-weight: 900;
-            font-size: 1.8rem;
+            font-size: 1.7rem;
         }
         .navbar-brand span {
             color: var(--neon-red);
@@ -88,99 +88,108 @@
             border-radius: 30px;
             padding: 3rem;
             text-align: center;
-            max-width: 500px;
+            max-width: 520px;
             width: 100%;
-            box-shadow: 0 0 40px rgba(255, 0, 102, 0.4);
+            box-shadow: 0 0 40px rgba(204, 0, 255, 0.3);
             position: relative;
             backdrop-filter: blur(15px);
+            transition: all 0.5s ease;
         }
         .status-box::before {
             content: '';
             position: absolute;
             top: -3px; left: -3px; right: -3px; bottom: -3px;
-            background: linear-gradient(45deg, var(--neon-red), var(--neon-green), var(--neon-yellow));
+            background: linear-gradient(45deg, var(--neon-purple), #ff00ff, #9900cc, var(--neon-purple));
             border-radius: 33px;
             z-index: -1;
-            animation: borderPulse 3s infinite;
+            animation: pulseGlow 2.5s infinite ease-in-out;
+            opacity: 0.8;
         }
-        @keyframes borderPulse {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; }
         }
 
         .status-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
+            font-size: 4.5rem;
+            margin-bottom: 18px;
             animation: pulseIcon 2s infinite;
         }
         @keyframes pulseIcon {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.08); }
         }
 
         .status-text {
-            font-size: 2.8rem;
-            margin: 20px 0;
+            font-size: 2.4rem;
+            margin: 18px 0;
             font-weight: 900;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
+            transition: all 0.4s ease;
         }
-        .status-active { color: var(--neon-green); text-shadow: var(--glow-green); }
-        .status-passive { color: var(--neon-red); text-shadow: var(--glow-red); }
+        .status-active { 
+            color: var(--neon-green); 
+            text-shadow: var(--glow-green), 0 0 40px rgba(0, 255, 136, 0.5); 
+        }
+        .status-passive { 
+            color: var(--neon-red); 
+            text-shadow: var(--glow-red), 0 0 40px rgba(255, 0, 102, 0.5); 
+        }
 
         .location {
-            font-size: 1.6rem;
-            color: var(--neon-yellow);
-            text-shadow: var(--glow-yellow);
-            margin: 15px 0;
+            font-size: 1.4rem;
+            color: #ffff66;
+            text-shadow: 0 0 15px rgba(255, 255, 102, 0.8);
+            margin: 12px 0;
             font-weight: 900;
         }
 
         .btn-group {
-            margin-top: 30px;
+            margin-top: 28px;
             display: flex;
-            gap: 15px;
+            gap: 14px;
             justify-content: center;
+            flex-wrap: wrap;
         }
         .btn-status {
-            padding: 14px 32px;
+            padding: 13px 28px;
             border-radius: 50px;
             font-weight: 900;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             letter-spacing: 1px;
             border: none;
-            transition: all 0.3s;
-            min-width: 140px;
+            transition: all 0.35s ease;
+            min-width: 135px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
         }
         .btn-active {
             background: linear-gradient(45deg, #00cc66, #00ff88);
             color: black;
-            box-shadow: 0 0 25px rgba(0, 255, 136, 0.7);
         }
         .btn-active:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.9);
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 0 35px rgba(0, 255, 136, 0.9);
         }
         .btn-passive {
             background: linear-gradient(45deg, #cc0066, #ff3399);
             color: white;
-            box-shadow: 0 0 25px rgba(255, 0, 102, 0.7);
         }
         .btn-passive:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 40px rgba(255, 0, 102, 0.9);
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 0 35px rgba(255, 0, 102, 0.9);
         }
 
         .last-update {
-            margin-top: 20px;
-            font-size: 1rem;
+            margin-top: 18px;
+            font-size: 0.95rem;
             color: #aaa;
         }
 
         footer {
             background: rgba(5,0,5,0.95);
-            padding: 1.5rem;
+            padding: 1.4rem;
             text-align: center;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #ccc;
             border-top: 1px solid var(--neon-red);
             font-weight: 900;
@@ -191,15 +200,15 @@
         #welcome-message {
             color: var(--text);
             font-weight: 900;
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-right: 10px;
         }
         #welcome-message span {
-            color: var(--neon-red);
-            text-shadow: 0 0 15px var(--neon-red);
+            color: var(--neon-purple);
+            text-shadow: 0 0 12px var(--neon-purple);
         }
 
-        .user-view { display: none; }
+        .user-view { display: none; margin-top: 20px; color: #ccc; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -214,7 +223,7 @@
                 <nav class="navbar navbar-expand-lg">
                     <a class="navbar-brand" href="index.html">CLAWY<span>1337</span></a>
                     <div class="ms-auto d-flex align-items-center">
-                        <span id="welcome-message">HOŞGELDİNİZ <span>OWNER!</span></span>
+                        <span id="welcome-message">HOŞGELDİNİZ <span>ADMIN</span>!</span>
                         <a href="index.html" class="btn btn-outline-light btn-sm me-2">
                             <i class="fas fa-home"></i> ANA SAYFA
                         </a>
@@ -227,14 +236,14 @@
         </header>
 
         <div class="container">
-            <div class="status-box">
+            <div class="status-box" id="statusBox">
                 <i class="fas fa-satellite-dish status-icon" id="statusIcon"></i>
                 <div class="status-text" id="statusText">YÜKLENİYOR...</div>
                 <div class="location" id="locationText">Konum: Bilinmiyor</div>
                 <p class="last-update" id="lastUpdate">Son güncelleme: -</p>
 
                 <!-- SADECE ADMIN GÖRÜR -->
-                <div class="btn-group" id="admin-controls">
+                <div class="btn-group" id="admin-controls" style="display: none;">
                     <button class="btn-status btn-active" onclick="setStatus('active')">
                         <i class="fas fa-play"></i> AKTİF
                     </button>
@@ -245,10 +254,10 @@
 
                 <!-- USER GÖRÜR -->
                 <div class="user-view" id="user-view">
-                    <p style="color: #aaa; margin-top: 20px;">Durum sadece Owner tarafından değiştirilebilir.</p>
+                    <p>Durum sadece Admin tarafından değiştirilebilir.</p>
                 </div>
 
-                <p id="status-message" style="margin-top: 20px; font-weight: 900;"></p>
+                <p id="status-message" style="margin-top: 18px; font-weight: 900; font-size: 0.95rem;"></p>
             </div>
         </div>
 
@@ -277,18 +286,18 @@
 
         // Sayfa yüklendiğinde
         window.addEventListener('load', () => {
-            const isAdmin = localStorage.getItem('isAdmin') === 'true';
             const username = localStorage.getItem('username');
-
-            if (username && (username === 'admin' || username === 'user')) {
+            if (username && (username === 'admin' || username === 'user' || username === 'arkadas')) {
                 document.getElementById('main-content').style.display = 'block';
 
-                // Hoşgeldin mesajı
+                const isAdmin = localStorage.getItem('isAdmin') === 'true';
                 const welcomeSpan = document.querySelector('#welcome-message span');
+                welcomeSpan.textContent = isAdmin ? 'ADMIN' : 'KULLANICI';
+
                 if (isAdmin) {
-                    welcomeSpan.textContent = 'OWNER!';
+                    document.getElementById('admin-controls').style.display = 'flex';
+                    document.getElementById('user-view').style.display = 'none';
                 } else {
-                    welcomeSpan.textContent = 'KULLANICI!';
                     document.getElementById('admin-controls').style.display = 'none';
                     document.getElementById('user-view').style.display = 'block';
                 }
@@ -305,7 +314,8 @@
                 const response = await fetch('/api/status');
                 if (response.ok) {
                     const data = await response.json();
-                    updateUI(data.status_text.includes('Aktif'), data.status_text, data.last_updated);
+                    const isActive = data.status_text.includes('Aktif');
+                    updateUI(isActive, data.status_text, data.last_updated);
                 }
             } catch (error) {
                 console.error('Hata:', error);
@@ -318,6 +328,7 @@
             const iconEl = document.getElementById('statusIcon');
             const locationEl = document.getElementById('locationText');
             const updateEl = document.getElementById('lastUpdate');
+            const boxEl = document.getElementById('statusBox');
 
             if (isActive) {
                 statusEl.textContent = 'AKTİF';
