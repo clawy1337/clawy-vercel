@@ -1,7 +1,7 @@
-// auth.js - SADECE admin/admin ve user/user
+// auth.js - TAM DÜZELTME: user/user çalışıyor, hata login ekranında, durum kaydediliyor
 const users = [
   { username: 'admin', passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', isAdmin: true },  // admin
-  { username: 'user',  passwordHash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', isAdmin: false }  // user
+  { username: 'user',  passwordHash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', isAdmin: false }   // user
 ];
 
 async function sha256(str) {
@@ -12,18 +12,21 @@ async function sha256(str) {
 }
 
 async function checkLogin(username, password) {
+  // Oturum kontrolü
   const savedUsername = localStorage.getItem('username');
   const savedHash = localStorage.getItem('passwordHash');
   if (savedUsername && savedHash) {
     const user = users.find(u => u.username === savedUsername && u.passwordHash === savedHash);
     if (user) {
       localStorage.setItem('isAdmin', user.isAdmin);
-      localStorage.setItem('lastLogin', new Date().toLocaleString('tr-TR'));
       return user;
     }
   }
 
-  if (!username || !password) return null;
+  if (!username || !password) {
+    showLoginError('Lütfen kullanıcı adı ve şifre girin!');
+    return null;
+  }
 
   const hashedPassword = await sha256(password);
   const user = users.find(u => u.username === username && u.passwordHash === hashedPassword);
@@ -31,12 +34,25 @@ async function checkLogin(username, password) {
     localStorage.setItem('username', username);
     localStorage.setItem('passwordHash', hashedPassword);
     localStorage.setItem('isAdmin', user.isAdmin);
-    localStorage.setItem('lastLogin', new Date().toLocaleString('tr-TR'));
+    clearLoginError();
     return user;
   } else {
-    alert('Yanlış kullanıcı adı veya şifre!');
+    showLoginError('Yanlış kullanıcı adı veya şifre!');
     return null;
   }
+}
+
+function showLoginError(message) {
+  const errorEl = document.getElementById('login-error');
+  if (errorEl) {
+    errorEl.textContent = message;
+    errorEl.style.display = 'block';
+  }
+}
+
+function clearLoginError() {
+  const errorEl = document.getElementById('login-error');
+  if (errorEl) errorEl.style.display = 'none';
 }
 
 function isAdmin() {
@@ -47,7 +63,7 @@ function logout() {
   localStorage.clear();
   document.getElementById('main-content').style.display = 'none';
   document.getElementById('login-container').style.display = 'block';
-  document.getElementById('login-message').textContent = 'Çıkış yapıldı!';
+  clearLoginError();
 }
 
 // Giriş butonu
@@ -63,7 +79,7 @@ document.getElementById('login-btn')?.addEventListener('click', async () => {
   }
 });
 
-// Sayfa yüklendiğinde kontrol
+// Sayfa yüklendiğinde
 window.addEventListener('load', () => {
   const savedUsername = localStorage.getItem('username');
   if (savedUsername) {
@@ -94,9 +110,11 @@ async function fetchStatus() {
       const data = await response.json();
       statusTextEl.innerText = data.status_text;
       lastUpdateEl.innerText = data.last_updated;
+    } else {
+      console.error('API Hatası:', response.status);
     }
   } catch (error) {
-    console.error('Hata:', error);
+    console.error('Bağlantı hatası:', error);
   }
 }
 
@@ -112,20 +130,24 @@ async function updateStatusJson(newStatus, now) {
         last_updated_by: localStorage.getItem('username')
       })
     });
+
     if (response.ok) {
-      alert('Durum kaydedildi!');
+      alert('Durum başarıyla kaydedildi!');
     } else {
-      alert('Hata!');
+      const errorText = await response.text();
+      alert('Kaydedilemedi! Hata: ' + errorText);
     }
   } catch (error) {
-    alert('Bağlantı hatası!');
+    alert('Bağlantı hatası: ' + error.message);
   }
 }
 
 async function editStatus() {
-  if (!isAdmin()) return alert('Yetkiniz yok!');
-  const newStatus = prompt('Yeni durum:', document.getElementById('statusText').innerText);
-  if (newStatus?.trim()) {
+  if (!isAdmin()) return alert('Yetkiniz yok! Sadece admin değiştirebilir.');
+
+  const current = document.getElementById('statusText').innerText;
+  const newStatus = prompt('Yeni durum girin:', current);
+  if (newStatus && newStatus.trim() && newStatus.trim() !== current) {
     const now = new Date().toLocaleString('tr-TR');
     document.getElementById('statusText').innerText = newStatus.trim();
     document.getElementById('lastUpdate').innerText = now;
