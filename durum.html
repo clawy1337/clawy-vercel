@@ -66,7 +66,7 @@
         .navbar-brand {
             font-family: 'Orbitron', sans-serif;
             color: var(--text) !important;
-            font-weight: 900
+            font-weight: 900;
             font-size: 1.7rem;
         }
         .navbar-brand span {
@@ -84,7 +84,6 @@
             justify-content: center;
         }
 
-        /* KÜÇÜK BOX */
         .status-box {
             background: rgba(20, 0, 20, 0.95);
             border: 3px solid transparent;
@@ -136,17 +135,11 @@
         }
         .status-active { 
             color: var(--neon-green) !important;
-            text-shadow: 
-                var(--glow-green),
-                0 0 50px rgba(0, 255, 136, 0.6),
-                0 0 70px rgba(0, 255, 136, 0.4) !important;
+            text-shadow: var(--glow-green), 0 0 50px rgba(0, 255, 136, 0.6), 0 0 70px rgba(0, 255, 136, 0.4) !important;
         }
         .status-passive { 
             color: var(--neon-red) !important;
-            text-shadow: 
-                var(--glow-red),
-                0 0 50px rgba(255, 0, 102, 0.6),
-                0 0 70px rgba(255, 0, 102, 0.4) !important;
+            text-shadow: var(--glow-red), 0 0 50px rgba(255, 0, 102, 0.6), 0 0 70px rgba(255, 0, 102, 0.4) !important;
         }
 
         .location {
@@ -154,9 +147,7 @@
             margin: 10px 0;
             font-weight: 900;
             color: var(--neon-yellow) !important;
-            text-shadow: 
-                var(--glow-yellow),
-                0 0 35px rgba(255, 255, 102, 0.7) !important;
+            text-shadow: var(--glow-yellow), 0 0 35px rgba(255, 255, 102, 0.7) !important;
             display: block;
         }
 
@@ -167,7 +158,7 @@
             justify-content: center;
             flex-wrap: wrap;
         }
-        .btn-status, .btn-location, .btn-faq {
+        .btn-status, .btn-location {
             padding: 11px 22px;
             border-radius: 50px;
             font-weight: 900;
@@ -201,14 +192,6 @@
         .btn-location:hover {
             transform: translateY(-3px) scale(1.03);
             box-shadow: 0 0 32px rgba(255, 255, 102, 0.9);
-        }
-        .btn-faq {
-            background: linear-gradient(45deg, #6600cc, #9933ff);
-            color: white;
-        }
-        .btn-faq:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 0 32px rgba(153, 51, 255, 0.9);
         }
 
         .last-update {
@@ -259,10 +242,8 @@
 </head>
 <body>
 
-    <!-- KIRMIZI YAĞMUR -->
     <div class="rain" id="rain"></div>
 
-    <!-- ANA İÇERİK -->
     <div id="main-content" style="display: none;">
         <header>
             <div class="container">
@@ -291,7 +272,6 @@
                 <div class="location" id="locationText">Bilinmiyor</div>
                 <p class="last-update" id="lastUpdate">Son güncelleme: -</p>
 
-                <!-- SADECE ADMIN GÖRÜR -->
                 <div class="btn-group" id="admin-controls" style="display: none;">
                     <button class="btn-status btn-active" onclick="setStatus('active')">
                         <i class="fas fa-play"></i> AKTİF
@@ -304,7 +284,6 @@
                     </button>
                 </div>
 
-                <!-- USER GÖRÜR -->
                 <div class="user-view" id="user-view">
                     <p>Durum sadece Admin tarafından değiştirilebilir.</p>
                 </div>
@@ -318,12 +297,9 @@
         </footer>
     </div>
 
-    <!-- auth.js -->
     <script src="auth.js" defer></script>
 
-    <!-- KONTROL + YAĞMUR -->
     <script>
-        // Yağmur
         const rainContainer = document.getElementById('rain');
         const createDrop = () => {
             const drop = document.createElement('div');
@@ -336,31 +312,17 @@
         };
         setInterval(createDrop, 70);
 
-        // Sayfa yüklendiğinde
+        // Sayfa yüklendiğinde içeriği göster
         window.addEventListener('load', () => {
             const username = localStorage.getItem('username');
-            if (username && (username === 'admin' || username === 'user' || username === 'arkadas')) {
+            if (username && ['admin', 'user', 'arkadas'].includes(username)) {
                 document.getElementById('main-content').style.display = 'block';
-
-                const isAdmin = localStorage.getItem('isAdmin') === 'true';
-                const welcomeSpan = document.querySelector('#welcome-message span');
-                welcomeSpan.textContent = isAdmin ? 'ADMIN' : 'KULLANICI';
-
-                if (isAdmin) {
-                    document.getElementById('admin-controls').style.display = 'flex';
-                    document.getElementById('user-view').style.display = 'none';
-                } else {
-                    document.getElementById('admin-controls').style.display = 'none';
-                    document.getElementById('user-view').style.display = 'block';
-                }
-
                 fetchStatus();
             } else {
                 window.location.href = 'index.html';
             }
         });
 
-        // Durum çek
         async function fetchStatus() {
             try {
                 const response = await fetch('/api/status');
@@ -374,7 +336,6 @@
             }
         }
 
-        // UI Güncelle
         function updateUI(isActive, statusText, lastUpdate) {
             const statusEl = document.getElementById('statusText');
             const locationEl = document.getElementById('locationText');
@@ -392,7 +353,6 @@
             updateEl.textContent = `Son güncelleme: ${lastUpdate}`;
         }
 
-        // SADECE ADMIN
         async function setStatus(mode) {
             if (localStorage.getItem('isAdmin') !== 'true') return;
 
@@ -437,6 +397,7 @@
                 if (response.ok) {
                     messageEl.textContent = 'Durum güncellendi!';
                     messageEl.style.color = statusText.includes('Aktif') ? '#00ff88' : '#ff0066';
+                    setTimeout(() => messageEl.textContent = '', 3000);
                     fetchStatus();
                 } else {
                     const err = await response.json();
