@@ -1,4 +1,3 @@
-// api/status.js
 let redis;
 
 async function getRedis() {
