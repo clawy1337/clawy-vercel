@@ -1,7 +1,7 @@
-// auth.js - KESİN ÇALIŞIR: İKİSİ DE "Hoşgeldin Sahip"
+// auth.js - YENİ HASH'LER, KESİN ÇALIŞIR
 const users = [
-  { username: 'admin', passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', isAdmin: true },  // admin
-  { username: 'user',  passwordHash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', isAdmin: false }   // user
+  { username: 'admin', passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', isAdmin: true },
+  { username: 'user',  passwordHash: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', isAdmin: false }
 ];
 
 async function sha256(str) {
