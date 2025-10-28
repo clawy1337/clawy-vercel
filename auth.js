@@ -5,7 +5,6 @@ const users = [
   { username: 'arkadas', passwordHash: '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', isAdmin: false }  // 12345
 ];
 
-// SHA-256 (Modern + Fallback)
 async function sha256(str) {
   try {
     const msgBuffer = new TextEncoder().encode(str);
@@ -29,7 +28,6 @@ function fallbackSha256(str) {
 
 // === GİRİŞ KONTROL ===
 async function checkLogin(username, password) {
-  // Zaten giriş yapılmış mı?
   const savedUsername = localStorage.getItem('username');
   const savedHash = localStorage.getItem('passwordHash');
   if (savedUsername && savedHash) {
@@ -43,9 +41,9 @@ async function checkLogin(username, password) {
   if (!username || !password) return null;
 
   const hashed = await sha256(password);
-  const user = users.find(u => u.username === username && u.passwordHash === hashed);
+  const user = users.find(u => toLowerCase(u.username) === toLowerCase(username) && u.passwordHash === hashed);
   if (user) {
-    localStorage.setItem('username', username);
+    localStorage.setItem('username', user.username);
     localStorage.setItem('passwordHash', hashed);
     localStorage.setItem('isAdmin', user.isAdmin);
     return user;
@@ -53,119 +51,95 @@ async function checkLogin(username, password) {
   return null;
 }
 
-// === HOŞ GELDİN MESAJI ===
-function updateWelcomeMessage() {
-  const welcomeEl = document.getElementById('welcome-message');
-  if (!welcomeEl) return;
+function toLowerCase(str) {
+  return str.toLowerCase();
+}
 
+// === HOŞ GELDİN MESAJI ===
+function updateWelcome() {
+  const el = document.getElementById('welcome-message');
+  if (!el) return;
   const username = localStorage.getItem('username');
   const isAdmin = localStorage.getItem('isAdmin') === 'true';
   if (username) {
-    const span = welcomeEl.querySelector('span');
+    const span = el.querySelector('span');
     if (span) span.textContent = isAdmin ? 'OWNER' : 'KULLANICI';
-    welcomeEl.style.display = 'inline-block';
+    el.style.display = 'inline-block';
   } else {
-    welcomeEl.style.display = 'none';
+    el.style.display = 'none';
   }
 }
 
-// === ADMIN KONTROLLERİ (sadece durum.html) ===
+// === ADMIN KONTROLLERİ ===
 function updateAdminControls() {
-  const adminControls = document.getElementById('admin-controls');
+  const controls = document.getElementById('admin-controls');
   const userView = document.getElementById('user-view');
-  if (!adminControls || !userView) return;
-
+  if (!controls || !userView) return;
   const isAdmin = localStorage.getItem('isAdmin') === 'true';
-  adminControls.style.display = isAdmin ? 'flex' : 'none';
+  controls.style.display = isAdmin ? 'flex' : 'none';
   userView.style.display = isAdmin ? 'none' : 'block';
 }
 
-// === ÇIKIŞ YAP ===
+// === ÇIKIŞ ===
 function logout() {
   if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
     localStorage.removeItem('username');
     localStorage.removeItem('passwordHash');
     localStorage.removeItem('isAdmin');
-
-    // Tüm sayfalarda çalışsın
-    const mainContent = document.getElementById('main-content');
-    if (mainContent) mainContent.style.display = 'none';
-
-    const loginContainer = document.getElementById('login-container');
-    if (loginContainer) loginContainer.style.display = 'block';
-
-    // Giriş sayfasına yönlendir (opsiyonel)
-    if (!window.location.pathname.includes('durum.html')) {
-      window.location.href = 'durum.html';
-    }
+    window.location.href = 'durum.html';
   }
 }
 
-// === SAYFA YÜKLENDİĞİNDE ===
+// === DOM YÜKLENDİ ===
 document.addEventListener('DOMContentLoaded', () => {
   const username = localStorage.getItem('username');
-
-  // Giriş yapılmamışsa → sadece durum.html'de login göster
-  if (!username && window.location.pathname.includes('durum.html')) {
-    const loginContainer = document.getElementById('login-container');
-    const mainContent = document.getElementById('main-content');
-    if (loginContainer) loginContainer.style.display = 'block';
-    if (mainContent) mainContent.style.display = 'none';
-    return;
-  }
-
-  // Giriş yapılmışsa
   if (username) {
-    const user = users.find(u => u.username === username);
-    if (user) {
-      updateWelcomeMessage();
-      updateAdminControls();
-
-      const mainContent = document.getElementById('main-content');
-      if (mainContent) mainContent.style.display = 'block';
-
-      const loginContainer = document.getElementById('login-container');
-      if (loginContainer) loginContainer.style.display = 'none';
+    updateWelcome();
+    updateAdminControls();
+    const main = document.getElementById('main-content');
+    if (main) main.style.display = 'block';
+    const login = document.getElementById('login-container');
+    if (login) login.style.display = 'none';
+  } else {
+    if (window.location.pathname.includes('durum.html')) {
+      const login = document.getElementById('login-container');
+      const main = document.getElementById('main-content');
+      if (login) login.style.display = 'flex';
+      if (main) main.style.display = 'none';
+    } else {
+      window.location.href = 'durum.html';
     }
   }
 });
 
-// === SADECE DURUM.HTML İÇİN GİRİŞ FORMU ===
+// === GİRİŞ FORMU (sadece durum.html) ===
 if (document.getElementById('login-btn')) {
   document.getElementById('login-btn').addEventListener('click', async () => {
     const username = document.getElementById('username')?.value.trim();
     const password = document.getElementById('password')?.value;
-    const errorEl = document.getElementById('login-error');
-
+    const error = document.getElementById('login-error');
     if (!username || !password) {
-      if (errorEl) {
-        errorEl.textContent = 'Lütfen kullanıcı adı ve şifre girin!';
-        errorEl.style.display = 'block';
-      }
+      error && (error.textContent = 'Boş bırakılamaz!', error.style.display = 'block');
       return;
     }
-
     const user = await checkLogin(username, password);
     if (user) {
-      if (errorEl) errorEl.style.display = 'none';
+      error && (error.style.display = 'none');
       document.getElementById('login-container').style.display = 'none';
       document.getElementById('main-content').style.display = 'block';
-      updateWelcomeMessage();
+      updateWelcome();
       updateAdminControls();
       if (typeof fetchStatus === 'function') fetchStatus();
     } else {
-      if (errorEl) {
-        errorEl.textContent = 'Yanlış kullanıcı adı veya şifre!';
-        errorEl.style.display = 'block';
-      }
+      error && (error.textContent = 'Hatalı giriş!', error.style.display = 'block');
     }
   });
 }
 
-// === Çıkış butonu her sayfada çalışsın ===
-document.querySelectorAll('[onclick="logout()"]').forEach(btn => {
-  btn.onclick = (e) => {
+// === ÇIKIŞ BUTONLARI ===
+document.querySelectorAll('button[onclick="logout()"], a[onclick="logout()"]').forEach(el => {
+  el.addEventListener('click', e => {
     e.preventDefault();
     logout();
-  };
+  });
 });
