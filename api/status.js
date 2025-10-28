@@ -16,7 +16,6 @@ export default async function handler(req, res) {
         const content = Buffer.from(data.content, 'base64').toString('utf8');
         res.status(200).json(JSON.parse(content));
     } catch (error) {
-        console.error('Okuma hatası:', error.message);
         res.status(500).json({ error: 'Okunamadı', details: error.message });
     }
 }
