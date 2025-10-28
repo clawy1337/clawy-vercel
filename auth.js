@@ -1,8 +1,8 @@
 // auth.js - TÜM SAYFALAR İÇİN ORTAK
 const users = [
-  { username: 'admin',   passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', isAdmin: true },  // admin
-  { username: 'user',    passwordHash: '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824', isAdmin: false }, // hello
-  { username: 'arkadas', passwordHash: '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', isAdmin: false }  // 12345
+  { username: 'admin',   passwordHash: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', isAdmin: true },
+  { username: 'user',    passwordHash: '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824', isAdmin: false },
+  { username: 'arkadas', passwordHash: '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', isAdmin: false }
 ];
 
 async function sha256(str) {
@@ -26,7 +26,6 @@ function fallbackSha256(str) {
   return Math.abs(hash).toString(16).padStart(64, '0');
 }
 
-// === GİRİŞ KONTROL ===
 async function checkLogin(username, password) {
   const savedUsername = localStorage.getItem('username');
   const savedHash = localStorage.getItem('passwordHash');
@@ -41,7 +40,7 @@ async function checkLogin(username, password) {
   if (!username || !password) return null;
 
   const hashed = await sha256(password);
-  const user = users.find(u => toLowerCase(u.username) === toLowerCase(username) && u.passwordHash === hashed);
+  const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.passwordHash === hashed);
   if (user) {
     localStorage.setItem('username', user.username);
     localStorage.setItem('passwordHash', hashed);
@@ -51,36 +50,29 @@ async function checkLogin(username, password) {
   return null;
 }
 
-function toLowerCase(str) {
-  return str.toLowerCase();
-}
-
-// === HOŞ GELDİN MESAJI ===
 function updateWelcome() {
   const el = document.getElementById('welcome-message');
   if (!el) return;
   const username = localStorage.getItem('username');
-  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  const isAdm = localStorage.getItem('isAdmin') === 'true';
   if (username) {
     const span = el.querySelector('span');
-    if (span) span.textContent = isAdmin ? 'OWNER' : 'KULLANICI';
+    if (span) span.textContent = isAdm ? 'OWNER' : 'KULLANICI';
     el.style.display = 'inline-block';
   } else {
     el.style.display = 'none';
   }
 }
 
-// === ADMIN KONTROLLERİ ===
 function updateAdminControls() {
   const controls = document.getElementById('admin-controls');
   const userView = document.getElementById('user-view');
   if (!controls || !userView) return;
-  const isAdmin = localStorage.getItem('isAdmin') === 'true';
-  controls.style.display = isAdmin ? 'flex' : 'none';
-  userView.style.display = isAdmin ? 'none' : 'block';
+  const isAdm = localStorage.getItem('isAdmin') === 'true';
+  controls.style.display = isAdm ? 'flex' : 'none';
+  userView.style.display = isAdm ? 'none' : 'block';
 }
 
-// === ÇIKIŞ ===
 function logout() {
   if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
     localStorage.removeItem('username');
@@ -90,7 +82,6 @@ function logout() {
   }
 }
 
-// === DOM YÜKLENDİ ===
 document.addEventListener('DOMContentLoaded', () => {
   const username = localStorage.getItem('username');
   if (username) {
@@ -112,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// === GİRİŞ FORMU (sadece durum.html) ===
 if (document.getElementById('login-btn')) {
   document.getElementById('login-btn').addEventListener('click', async () => {
     const username = document.getElementById('username')?.value.trim();
@@ -136,8 +126,7 @@ if (document.getElementById('login-btn')) {
   });
 }
 
-// === ÇIKIŞ BUTONLARI ===
-document.querySelectorAll('button[onclick="logout()"], a[onclick="logout()"]').forEach(el => {
+document.querySelectorAll('[onclick="logout()"]').forEach(el => {
   el.addEventListener('click', e => {
     e.preventDefault();
     logout();
