@@ -75,7 +75,7 @@
             font-family: 'Orbitron', sans-serif;
             color: var(--text) !important;
             font-weight: 900;
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
         .navbar-brand span {
             color: var(--neon);
@@ -84,7 +84,7 @@
         .nav-link {
             color: var(--text) !important;
             font-weight: 900;
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
         .nav-link:hover {
             color: var(--neon) !important;
@@ -102,7 +102,7 @@
             z-index: 1;
         }
         .profile-img {
-            width: 160px; height: 160px;
+            width: 180px; height: 180px;
             border-radius: 50%;
             border: 5px solid var(--neon);
             box-shadow: 
@@ -113,7 +113,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
+            font-size: 4.5rem;
             color: var(--neon);
             animation: float 6s ease-in-out infinite;
         }
@@ -123,7 +123,7 @@
         }
 
         h1 {
-            font-size: 3.8rem;
+            font-size: 4rem;
             margin: 15px 0;
             color: var(--text);
             font-weight: 900;
@@ -172,7 +172,7 @@
             max-width: 700px;
             margin: 25px auto;
             line-height: 1.8;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--text);
             font-weight: 900;
             letter-spacing: 0.5px;
@@ -183,13 +183,10 @@
             padding: 1.5rem;
             text-align: center;
             font-size: 1rem;
-            color: #ccc;
+            color: var(--text);
             border-top: 1px solid var(--neon);
             font-weight: 900;
-        }
-        footer a {
-            color: var(--neon);
-            text-decoration: none;
+            letter-spacing: 1px;
         }
 
         /* GİRİŞ EKRANI */
@@ -199,7 +196,7 @@
             border-radius: 25px;
             padding: 2.5rem;
             margin: 2rem auto;
-            max-width: 420px;
+            max-width: 450px;
             text-align: center;
             box-shadow: 0 0 30px rgba(255, 0, 102, 0.6);
             backdrop-filter: blur(12px);
@@ -225,13 +222,17 @@
             color: var(--text);
             margin-bottom: 15px;
             border-radius: 15px;
-            padding: 12px;
+            padding: 14px;
             font-weight: 900;
-            font-size: 1rem;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
         .login-container input::placeholder {
             color: #aaa;
             font-weight: 900;
+            font-size: 1.3rem;
+            text-transform: uppercase;
         }
         .login-container button {
             background: linear-gradient(45deg, var(--neon), #ff3399);
@@ -242,7 +243,7 @@
             font-weight: 900;
             color: white;
             transition: 0.3s;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             letter-spacing: 1px;
         }
         .login-container button:hover {
@@ -254,17 +255,19 @@
             color: #ff6b6b; 
             margin-top: 10px; 
             font-weight: 900;
-            letter-spacing: 0.5px;
+            font-size: 1.1rem;
         }
         #welcome-message {
             color: var(--text);
             font-weight: 900;
+            font-size: 1.2rem;
             margin-right: 10px;
-            font-size: 1rem;
-        }
-        #welcome-message span {
-            color: var(--neon);
             text-shadow: 0 0 10px var(--neon);
+            background: rgba(255, 0, 102, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--neon);
+            box-shadow: 0 0 15px rgba(255, 0, 102, 0.4);
         }
     </style>
 </head>
@@ -275,7 +278,7 @@
 
     <!-- GİRİŞ EKRANI -->
     <div class="login-container" id="login-container">
-        <h2 class="neon-glow" style="color: white; font-size: 2.2rem;">GİRİŞ YAP</h2>
+        <h2 class="neon-glow" style="color: white; font-size: 2.5rem;">GİRİŞ YAP</h2>
         <input type="text" id="username" class="form-control" placeholder="KULLANICI ADI" required>
         <input type="password" id="password" class="form-control" placeholder="ŞİFRE" required>
         <button id="login-btn" class="btn">GİRİŞ</button>
@@ -289,7 +292,7 @@
                 <nav class="navbar navbar-expand-lg">
                     <a class="navbar-brand" href="#">CLAWY<span>1337</span></a>
                     <div class="ms-auto d-flex align-items-center">
-                        <span id="welcome-message">HOŞGELDİN <span>SAHİP</span></span>
+                        <span id="welcome-message"></span>
                         <a href="durum.html" class="btn btn-outline-light btn-sm me-2">
                             <i class="fas fa-circle-dot"></i> DURUM
                         </a>
@@ -327,8 +330,7 @@
         </section>
 
         <footer>
-            © 2025 CLAWY1337 • 
-            <a href="https://clawy-vercel.vercel.app">CLAWY-VERCEL.VERCEL.APP</a>
+            © 2025 Clawy - Tüm hakları saklıdır.
         </footer>
     </div>
 
